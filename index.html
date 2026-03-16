@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Yeriel Bracha Computing Quiz</title>
+  
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Computing Quiz">
+  <link rel="apple-touch-icon" href="icon.png">
+  <meta name="theme-color" content="#4D2612">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #4D2612 0%, #7B3F00 50%, #D4AF37 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .container {
+      width: 95%;
+      max-width: 900px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    h1 {
+      text-align: center;
+      color: #4D2612;
+      margin-bottom: 20px;
+      font-size: 2.2em;
+      font-weight: 700;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .hidden { 
+      display: none !important; 
+    }
+    
+    /* Name Input Page */
+    .name-section {
+      text-align: center;
+      padding: 20px;
+    }
+    
+    input[type="text"] {
+      width: 100%;
+      max-width: 400px;
+      padding: 15px;
+      border-radius: 10px;
+      border: 2px solid #bdc3c7;
+      font-size: 1.1em;
+      margin: 15px auto;
+      display: block;
+      transition: border-color 0.3s ease;
+    }
+    
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #D4AF37;
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+    }
+    
+    /* Welcome Page */
+    .welcome-content {
+      text-align: center;
+      padding: 20px;
+    }
+    
+    .quiz-info {
+      background: rgba(212, 175, 55, 0.1);
+      border: 2px solid #D4AF37;
+      border-radius: 15px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    
+    marquee {
+      background: linear-gradient(135deg, #4D2612, #D4AF37);
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
+      margin: 15px 0;
+      font-weight: bold;
+    }
+    
+    /* Buttons */
+    button {
+      background: linear-gradient(135deg, #4D2612, #D4AF37);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 1.1em;
+      font-weight: 600;
+      margin: 10px;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    button:hover {
+      background: linear-gradient(135deg, #D4AF37, #4D2612);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(77, 38, 18, 0.4);
+    }
+    
+    button:disabled {
+      background: #95a5a6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    button.secondary {
+      background: #ecf0f1;
+      color: #2c3e50;
+      text-transform: none;
+      letter-spacing: normal;
+      padding: 12px 20px;
+      margin: 5px;
+      border-radius: 10px;
+      font-weight: normal;
+    }
+    
+    button.secondary:hover {
+      background: #bdc3c7;
+      transform: translateY(-1px);
+    }
+    
+    button.selected {
+      background: linear-gradient(135deg, #27ae60, #2ecc71) !important;
+      color: white !important;
+    }
+    
+    /* Countdown Screen */
+    .countdown-screen {
+      text-align: center;
+      padding: 60px 20px;
+      font-size: 4em;
+      font-weight: bold;
+      color: #D4AF37;
+      animation: pulse 1s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.1); opacity: 1; }
+    }
+    
+    /* Quiz Area */
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding: 15px;
+      background: rgba(212, 175, 55, 0.1);
+      border-radius: 10px;
+    }
+    
+    .question-counter {
+      font-weight: bold;
+      color: #2c3e50;
+      font-size: 1.1em;
+    }
+    
+    .timer {
+      font-weight: bold;
+      color: #e74c3c;
+      font-size: 1.2em;
+      padding: 8px 15px;
+      background: rgba(231, 76, 60, 0.1);
+      border-radius: 20px;
+    }
+    
+    .timer.warning {
+      animation: blink 1s infinite;
+    }
+    
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0.5; }
+    }
+    
+    .question-content {
+      background: rgba(255, 255, 255, 0.8);
+      padding: 25px;
+      border-radius: 15px;
+      margin-bottom: 25px;
+      border-left: 5px solid #D4AF37;
+    }
+    
+    .question-text {
+      font-size: 1.2em;
+      color: #2c3e50;
+      font-weight: 600;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+    
+    .option-button {
+      text-align: left;
+      padding: 15px 20px;
+      border-radius: 10px;
+      font-size: 1em;
+      line-height: 1.4;
+      word-wrap: break-word;
+    }
+    
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 30px;
+    }
+    
+    .nav-buttons {
+      display: flex;
+      gap: 10px;
+    }
+    
+    /* Results */
+    .results {
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .score-display {
+      background: linear-gradient(135deg, #2ecc71, #27ae60);
+      color: white;
+      padding: 25px;
+      border-radius: 15px;
+      margin: 20px 0;
+      font-size: 1.1em;
+    }
+    
+    .summary {
+      text-align: left;
+      margin-top: 30px;
+      padding: 20px;
+      background: rgba(236, 240, 241, 0.8);
+      border-radius: 15px;
+    }
+    
+    .question-review {
+      margin: 15px 0;
+      padding: 15px;
+      background: white;
+      border-radius: 10px;
+      border-left: 4px solid #bdc3c7;
+    }
+    
+    .question-review.correct {
+      border-left-color: #27ae60;
+    }
+    
+    .question-review.wrong {
+      border-left-color: #e74c3c;
+    }
+    
+    /* Admin Section Styles */
+    .admin-section {
+      padding: 20px;
+    }
+    
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    
+    .admin-table th, .admin-table td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .admin-table th {
+      background: #f8f9fa;
+      color: #2c3e50;
+    }
+    
+    .date-group {
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    
+    .date-header {
+      background: #f1f3f5;
+      padding: 12px 20px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+    }
+    
+    .date-header::after {
+      content: '▼';
+      font-size: 0.8em;
+      transition: transform 0.3s;
+    }
+    
+    .date-header.collapsed::after {
+      transform: rotate(-90deg);
+    }
+    
+    .table-container.hidden {
+      display: none;
+    }
+    
+    /* Footer */
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      padding: 20px;
+      background: linear-gradient(135deg, #2c3e50, #34495e);
+      color: white;
+      border-radius: 15px;
+      font-size: 14px;
+    }
+    
+    /* Lock Message */
+    .lock-message {
+      text-align: center;
+      color: #e74c3c;
+      font-weight: bold;
+      background: rgba(231, 76, 60, 0.1);
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 15px;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .container { padding: 20px; }
+      h1 { font-size: 1.8em; }
+      .countdown-screen { font-size: 3em; }
+      .quiz-header { flex-direction: column; gap: 10px; }
+      .controls { flex-direction: column; gap: 15px; }
+      button { padding: 12px 20px; font-size: 1em; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Name Input Page -->
+    <div id="namePage" class="name-section">
+      <h1>🎓 Yeriel Bracha Computing Quiz</h1>
+      <p>Welcome! Please enter your details to begin the quiz.</p>
+      <input type="text" id="studentName" placeholder="Enter your full name" />
+      <input type="text" id="studentClass" placeholder="Enter your class (e.g., Basic 7)" />
+      <button id="proceedBtn">Proceed to Quiz</button>
+      <div id="lockMessage" class="lock-message hidden"></div>
+      <div style="margin-top: 30px;">
+        <button id="adminLoginBtn" class="secondary admin-btn">🔐 Admin Portal</button>
+      </div>
+    </div>
+
+    <!-- Welcome Page -->
+    <div id="welcomePage" class="welcome-content hidden">
+      <h1>Welcome to Quizzilla! 🚀</h1>
+      <div class="quiz-info">
+        <p>📚 <strong>Subject:</strong> Introduction to Computing - BECE Mock Test</p>
+        <marquee>Just select the correct answer for each question!</marquee>
+        <p>⏱️ <strong>Time Limit:</strong> 30 minutes</p>
+        <p>❓ <strong>Questions:</strong> 85 questions (all questions included)</p>
+        <p>🎯 <strong>Instructions:</strong> Use Next and Previous to navigate, click Submit when done</p>
+      </div>
+      <button id="startBtn">🎯 Sure, Let's Start Quiz!</button>
+    </div>
+
+    <!-- Countdown Screen -->
+    <div id="countdownScreen" class="countdown-screen hidden"></div>
+
+    <!-- Quiz Area -->
+    <div id="quizArea" class="hidden">
+      <div class="quiz-header">
+        <div class="question-counter" id="questionCounter">Question 1 of 85</div>
+        <div class="timer" id="timer">30:00</div>
+      </div>
+      
+      <div class="question-content">
+        <div class="question-text" id="questionText"></div>
+        <div class="options-grid" id="optionsContainer"></div>
+      </div>
+      
+      <div class="controls">
+        <div class="nav-buttons">
+          <button type="button" id="prevBtn" class="secondary">← Previous</button>
+          <button type="button" id="nextBtn">Next →</button>
+        </div>
+        <button type="button" id="submitBtn" class="hidden">🎯 Submit Quiz</button>
+      </div>
+    </div>
+
+    <!-- Results Area -->
+    <div id="resultsArea" class="results hidden">
+      <h1>🎉 Quiz Completed!</h1>
+      <div id="scoreDisplay" class="score-display"></div>
+      <div id="summaryContainer" class="summary"></div>
+      <button onclick="location.reload()" class="secondary">Close & New Session</button>
+    </div>
+
+    <!-- Admin Area -->
+    <div id="adminArea" class="admin-section hidden">
+      <div class="admin-controls">
+        <h2>📊 Student Results Dashboard</h2>
+        <button id="adminBackBtn" class="secondary">← Back</button>
+      </div>
+      <div id="adminTableContainer">
+        <p>Loading scores...</p>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p><strong>Yeriel Bracha Coding Club</strong><br>© 2025 - Excellence in Computing Education</p>
+    </footer>
+  </div>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js');
+      });
+    }
+
+    const QUIZ_DURATION = 60 * 60;
+    const TOTAL_QUESTIONS = 85; 
+    const COOLDOWN_HOURS = 12;
+
+    const quizData = [
+      { id: 1, question: "What are the two main aspects of the dual nature of network systems?", options: ["Hardware and Software components", "Physical components and Logical/Physical layout", "Clients and Servers", "LAN and WAN connections"], correctAnswer: 1, explanation: "Network systems have a dual nature consisting of Physical Components and Logical/Physical Layout." },
+      { id: 2, question: "What is a client in a network?", options: ["A dedicated computer that stores shared data", "A device that connects to the network to access shared resources", "A device that routes data between networks", "A central hub that manages network traffic"], correctAnswer: 1, explanation: "A client is a device that connects to the network to access shared resources." },
+      { id: 3, question: "What is the primary function of a server?", options: ["To connect multiple networks together", "To convert digital signals to analog", "To store and manage shared data and resources while managing access and security", "To provide physical connections between devices"], correctAnswer: 2, explanation: "A server stores and manages shared data and resources." },
+      { id: 4, question: "How does a hub process data?", options: ["It examines data and routes it only to the intended device", "It converts digital signals to analog", "It receives data and broadcasts it to all connected devices", "It stores data for later retrieval"], correctAnswer: 2, explanation: "A hub simply receives data and broadcasts it to all connected devices." },
+      { id: 5, question: "What makes a switch different from a hub?", options: ["It's less expensive than a hub", "It only works with wireless connections", "It's an active device that examines data and routes it only to the intended device", "It requires no power to operate"], correctAnswer: 2, explanation: "A switch examines received data and routes it only to the intended device." },
+      { id: 6, question: "What is the primary function of a router?", options: ["To connect devices on a single LAN", "To convert digital signals to analog", "To connect multiple different networks together and route data between them", "To provide physical connections using cables"], correctAnswer: 2, explanation: "A router connects multiple different networks and routes data between them." },
+      { id: 7, question: "What does a modem do?", options: ["Connects multiple devices on a LAN", "Connects a network to the Internet and converts digital data to analog signals", "Routes data between different networks", "Provides physical connections using cables"], correctAnswer: 1, explanation: "A modem connects a network to the Internet by converting signals." },
+      { id: 8, question: "Which cable type is standard for LANs?", options: ["Fiber optic", "Coaxial", "Ethernet (Cat5, Cat5e, Cat6, Cat6a)", "USB"], correctAnswer: 2, explanation: "Ethernet cables are the standard for LANs." },
+      { id: 9, question: "What is a network topology?", options: ["The type of cables used in a network", "The speed of data transmission", "The physical and logical layout of the devices on a network", "The brand of networking equipment"], correctAnswer: 2, explanation: "A topology is the layout of devices on a network." },
+      { id: 10, question: "What are the characteristics of a Point-to-Point topology?", options: ["All devices share a single cable", "Direct connection without a central hub, simple and inexpensive but unscalable", "Devices connect to a central hub", "Devices are connected in a loop"], correctAnswer: 1, explanation: "Point-to-Point is a direct connection between two devices." },
+      { id: 11, question: "How is data transmitted in a Bus topology?", options: ["Through a central hub", "Via direct connections", "All devices share a single cable and listen for intended data", "In one direction in a loop"], correctAnswer: 2, explanation: "In Bus, all devices share a single backbone cable." },
+      { id: 12, question: "What is the main vulnerability of a Bus topology?", options: ["Expensive", "Complex routing", "Vulnerable to a single point of failure on the main bus", "Hard to add devices"], correctAnswer: 2, explanation: "If the main cable fails, the entire network fails." },
+      { id: 13, question: "How is data routed in a Star topology?", options: ["Shared cable", "Direct mesh", "All devices connect to a central hub", "Loop"], correctAnswer: 2, explanation: "All devices connect to a central hub/switch." },
+      { id: 14, question: "What happens if one endpoint device fails in a Star topology?", options: ["Network goes down", "Only that device is affected", "Data stops in one direction", "Hub shuts down"], correctAnswer: 1, explanation: "A single device failure does not affect the rest of the network." },
+      { id: 15, question: "What is the primary weakness of a Star topology?", options: ["Hard to scale", "Slow", "Failure of the central hub takes down everything", "Too many cables"], correctAnswer: 2, explanation: "The central hub is a single point of failure." },
+      { id: 16, question: "How are devices connected in a Ring topology?", options: ["Central hub", "Shared cable", "Direct mesh", "In a loop, each connected to exactly two others"], correctAnswer: 3, explanation: "Devices form a circular loop." },
+      { id: 17, question: "What is a strength of Ring topology?", options: ["Cheap", "More reliable than Bus; failures can be bypassed", "Simplest", "Fewest cables"], correctAnswer: 1, explanation: "Ring is often more manageable than simple Bus." },
+      { id: 18, question: "What causes a complete network failure in Ring topology?", options: ["Hub failure", "Single endpoint failure", "If the ring loop breaks", "Too many devices"], correctAnswer: 2, explanation: "A break in the loop stops data flow." },
+      { id: 19, question: "How are devices connected in a Mesh topology?", options: ["Central hub", "Two neighbors in a loop", "Direct, dedicated connection to every other device", "Shared backbone"], correctAnswer: 2, explanation: "Every device connects to every other device." },
+      { id: 20, question: "What is the primary advantage of Mesh topology?", options: ["Low cost", "Simple", "Highest redundancy and reliability", "Easy setup"], correctAnswer: 2, explanation: "Multiple paths for data mean high reliability." },
+      { id: 21, question: "What are the disadvantages of Mesh topology?", options: ["Low redundancy", "Slow", "Most complex and expensive to set up", "Cannot expand"], correctAnswer: 2, explanation: "The amount of cabling is very expensive." },
+      { id: 22, question: "What is a Tree topology?", options: ["Point-to-point", "Combination of bus and star", "Mesh variation", "Wireless"], correctAnswer: 1, explanation: "Tree combines Bus and Star layouts." },
+      { id: 23, question: "When is Tree topology typically used?", options: ["Home", "Wireless", "Larger networks like schools/businesses", "Temporary"], correctAnswer: 2, explanation: "Good for connecting multiple sub-networks." },
+      { id: 24, question: "What is the trade-off of Tree topology?", options: ["No management", "Not scalable", "Central management but vulnerable at the hub/primary branch", "Expensive"], correctAnswer: 2, explanation: "Provides structure but has critical nodes." },
+      { id: 25, question: "What is a Hybrid topology?", options: ["Bus", "Combination of two or more different topologies", "Wireless-only", "Fiber-only"], correctAnswer: 1, explanation: "Uses multiple topology types." },
+      { id: 26, question: "What is the main strength of Hybrid topology?", options: ["Cost", "Design simplicity", "Highly customizable", "No maintenance"], correctAnswer: 2, explanation: "Tailored to specific organization needs." },
+      { id: 27, question: "What are the weaknesses of Hybrid topology?", options: ["Limited custom", "Low reliability", "Expensive and complex to design", "Static"], correctAnswer: 2, explanation: "Complexity leads to higher costs." },
+      { id: 28, question: "Which topologies offer premium performance but demand high investment?", options: ["Bus/Ring", "Star/P2P", "Mesh/Hybrid", "Bus/Star"], correctAnswer: 2, explanation: "Mesh and Hybrid are the high-end options." },
+      { id: 29, question: "What is the primary strength of Bus topology?", options: ["Redundancy", "Management", "Easy Setup", "Scalability"], correctAnswer: 2, explanation: "Bus is quick and easy to deploy." },
+      { id: 30, question: "What is the key vulnerability of Star topology?", options: ["Main cable", "Ring break", "Central hub failure", "Complexity"], correctAnswer: 2, explanation: "The central hub is critical." },
+      { id: 31, question: "What is the primary strength of Ring topology?", options: ["Easy Setup", "Management", "Predictable Data Flow", "Redundancy"], correctAnswer: 2, explanation: "Ring has a very clear data path." },
+      { id: 32, question: "What is the key vulnerability of Mesh topology?", options: ["Single point", "Hub failure", "Cost and complexity", "Branches"], correctAnswer: 2, explanation: "The overhead of many connections is high." },
+      { id: 33, question: "What is the primary strength of Tree topology?", options: ["Easy Setup", "Data Flow", "Redundancy", "Scalability"], correctAnswer: 3, explanation: "Easy to add more branches." },
+      { id: 34, question: "What dictates internal network efficiency?", options: ["Cables", "Device count", "Choice between Hubs (passive) and Switches (active)", "Server location"], correctAnswer: 2, explanation: "Active processing is more efficient." },
+      { id: 35, question: "What do linear architectures like Bus and Ring offer?", options: ["Redundancy", "Cost savings with vulnerabilities", "Reliable management", "Minimal investment scalability"], correctAnswer: 1, explanation: "They are budget-friendly but risky." },
+      { id: 36, question: "What do advanced architectures like Mesh and Hybrid eliminate?", options: ["Cables", "Management", "Single points of failure", "Active hardware"], correctAnswer: 2, explanation: "Multiple paths remove single points of failure." },
+      { id: 37, question: "What is required for Mesh and Hybrid?", options: ["Few connections", "Wireless", "Extensive physical connections and maintenance", "Simple equipment"], correctAnswer: 2, explanation: "They need robust physical infrastructure." },
+      { id: 38, question: "Which topology provides a central point of control?", options: ["Bus", "Ring", "Star", "Mesh"], correctAnswer: 2, explanation: "Control is at the central hub." },
+      { id: 39, question: "Which topology has each device connected to exactly two others?", options: ["Star", "Bus", "Mesh", "Ring"], correctAnswer: 3, explanation: "This forms the ring loop." },
+      { id: 40, question: "Which topology is best for maximum redundancy regardless of cost?", options: ["Bus", "Star", "Ring", "Mesh"], correctAnswer: 3, explanation: "Mesh offers every possible path." },
+      { id: 41, question: "Kwesi is writing instructions for a computer to calculate students’ averages automatically; which concept is he using?", options: ["Programming", "Formatting", "Scanning", "Printing"], correctAnswer: 0, explanation: "Writing instructions for a computer to execute tasks is called programming." },
+      { id: 42, question: "Adjoa writes a set of step-by-step instructions for a computer to display “Welcome” on the screen; what is this set of instructions called?", options: ["Program", "Folder", "Database", "Network"], correctAnswer: 0, explanation: "A program is a set of instructions that a computer follows to perform a task." },
+      { id: 43, question: "A learner wants to write and test Python code on the same platform that highlights errors automatically; which tool should he use?", options: ["IDE", "Spreadsheet", "Word processor", "Browser"], correctAnswer: 0, explanation: "An Integrated Development Environment (IDE) provides tools for writing, testing, and debugging code." },
+      { id: 44, question: "Kojo uses a software environment that allows him to write code, debug errors and run programs in one place; which environment is this?", options: ["Integrated Development Environment", "Control Panel", "File Manager", "Task Manager"], correctAnswer: 0, explanation: "An Integrated Development Environment (IDE) is a software suite that consolidates basic tools for software development." },
+      { id: 45, question: "When coding, an IDE shows coloured text and points out syntax errors before running the program; what is the main importance of this feature?", options: ["It helps detect errors early", "It stores files online", "It connects to the internet", "It compresses files"], correctAnswer: 0, explanation: "Syntax highlighting and error detection help programmers identify issues before execution." },
+      { id: 46, question: "A student converts the binary number 1010 to decimal while solving a programming task; what is the correct decimal value?", options: ["8", "9", "10", "12"], correctAnswer: 2, explanation: "Binary 1010 equals (1×8)+(0×4)+(1×2)+(0×1) = 10 in decimal." },
+      { id: 47, question: "In a computing class, Ama converts the binary number 1101 to decimal; which answer should she obtain?", options: ["11", "12", "13", "14"], correctAnswer: 2, explanation: "Binary 1101 equals (1×8)+(1×4)+(0×2)+(1×1) = 13 in decimal." },
+      { id: 48, question: "Kofi enters the expression 6 + 4 × 2 in a program; according to operator precedence, what will be the result?", options: ["20", "14", "16", "18"], correctAnswer: 1, explanation: "According to operator precedence, multiplication is performed before addition: 6 + (4 × 2) = 6 + 8 = 14." },
+      { id: 49, question: "A student writes (6 + 4) × 2 in a program; what result will the computer display?", options: ["20", "14", "16", "12"], correctAnswer: 0, explanation: "Parentheses override operator precedence: (6 + 4) × 2 = 10 × 2 = 20." },
+      { id: 50, question: "A school museum displays vacuum tube computers as the earliest machines; which generation of computers used vacuum tubes?", options: ["First generation", "Second generation", "Third generation", "Fourth generation"], correctAnswer: 0, explanation: "First-generation computers (1940s-1950s) used vacuum tubes for circuitry." },
+      { id: 51, question: "Computers that used transistors instead of vacuum tubes belong to which generation?", options: ["First generation", "Second generation", "Third generation", "Fifth generation"], correctAnswer: 1, explanation: "Second-generation computers (1950s-1960s) used transistors, which were smaller, faster, and more reliable than vacuum tubes." },
+      { id: 52, question: "Integrated circuits improved computer speed and reduced size; which generation introduced this technology?", options: ["First", "Second", "Third", "Fourth"], correctAnswer: 2, explanation: "Third-generation computers (1960s-1970s) used integrated circuits, which placed multiple transistors on a single chip." },
+      { id: 53, question: "Modern computers that use microprocessors are classified under which generation?", options: ["Second", "Third", "Fourth", "Fifth"], correctAnswer: 2, explanation: "Fourth-generation computers (1970s-present) use microprocessors, which integrate the entire CPU on a single chip." },
+      { id: 54, question: "A student starts a computer and sees icons such as Recycle Bin and This PC on the desktop; which operating system is likely running?", options: ["Windows", "Linux", "Android", "iOS"], correctAnswer: 0, explanation: "Windows operating system uses icons like Recycle Bin and This PC on the desktop." },
+      { id: 55, question: "Kojo installs a computer system that uses graphical icons and windows to help users interact with the computer; which type of system is this?", options: ["Operating system", "Compiler", "Spreadsheet", "Antivirus"], correctAnswer: 0, explanation: "An operating system with a graphical user interface (GUI) uses icons and windows for user interaction." },
+      { id: 56, question: "In the computer lab, each student logs into Windows using their own username and password; what feature allows this?", options: ["User accounts", "File extension", "Firewall", "Clipboard"], correctAnswer: 0, explanation: "User accounts allow individual users to log in with their own credentials and settings." },
+      { id: 57, question: "A teacher creates separate login profiles so students cannot access each other’s files; what is the main reason for this?", options: ["Security", "Decoration", "Storage increase", "Faster internet"], correctAnswer: 0, explanation: "Separate user accounts provide security by isolating each user's files and settings." },
+      { id: 58, question: "A learner saves assignments in a folder named “ICT Homework” so they can be easily located later; what is the main purpose of a folder?", options: ["Organise files", "Run programs", "Delete data", "Print documents"], correctAnswer: 0, explanation: "Folders are used to organize and store files in a structured manner." },
+      { id: 59, question: "Ama groups several related files inside one digital container on the computer; what is this container called?", options: ["Folder", "Icon", "Shortcut", "Toolbar"], correctAnswer: 0, explanation: "A folder is a digital container used to group and organize related files." },
+      { id: 60, question: "When saving a document, Kojo notices the file name ends with .docx; what does this represent?", options: ["File extension", "Folder name", "Program code", "Virus"], correctAnswer: 0, explanation: "A file extension (.docx) indicates the file type and which program should open it." },
+      { id: 61, question: "A student receives a file named report.pdf from a teacher; what does .pdf indicate?", options: ["File type", "Password", "Folder location", "File size"], correctAnswer: 0, explanation: "The .pdf extension indicates that the file is a Portable Document Format file." },
+      { id: 62, question: "After mistakenly deleting an assignment, a learner restores it from a special location on the desktop; which location is this?", options: ["Recycle Bin", "Control Panel", "Desktop folder", "Taskbar"], correctAnswer: 0, explanation: "Deleted files are moved to the Recycle Bin where they can be restored." },
+      { id: 63, question: "A user deletes a file but later empties the Recycle Bin; what happens to the file?", options: ["Permanently deleted", "Moved to desktop", "Copied to cloud", "Converted to another format"], correctAnswer: 0, explanation: "Emptying the Recycle Bin permanently deletes files from the computer." },
+      { id: 64, question: "Akosua opens Google Chrome to visit websites and read online news; what type of software is Google Chrome?", options: ["Web browser", "Search engine", "Word processor", "Operating system"], correctAnswer: 0, explanation: "Google Chrome is a web browser used to access and view websites." },
+      { id: 65, question: "When Kofi types a website address and views pages on the internet, which type of application is he using?", options: ["Web browser", "Database", "Spreadsheet", "Compiler"], correctAnswer: 0, explanation: "A web browser is used to access and display web pages from the internet." },
+      { id: 66, question: "Ama wants to find information about climate change by typing keywords online; which tool should she use?", options: ["Search engine", "File manager", "Paint program", "Antivirus"], correctAnswer: 0, explanation: "A search engine helps users find information on the internet by entering keywords." },
+      { id: 67, question: "Kojo types a question into Google and receives many links to websites; what service provided those results?", options: ["Search engine", "Web server", "Social network", "Email client"], correctAnswer: 0, explanation: "A search engine indexes web content and provides relevant links based on user queries." },
+      { id: 68, question: "A student uses Facebook to communicate and share pictures with friends; what category of internet service is this?", options: ["Social media", "Web browser", "Operating system", "Database"], correctAnswer: 0, explanation: "Facebook is a social media platform used for communication and sharing content." },
+      { id: 69, question: "Twitter, Instagram and Facebook are mainly used for interaction and sharing content online; what are they collectively called?", options: ["Social media platforms", "Programming tools", "Web servers", "Operating systems"], correctAnswer: 0, explanation: "Twitter, Instagram, and Facebook are examples of social media platforms." },
+      { id: 70, question: "The global network that connects millions of computers for communication and information sharing is known as the _____.", options: ["Internet", "Intranet", "Database", "Spreadsheet"], correctAnswer: 0, explanation: "The Internet is the global network connecting millions of private, public, academic, business, and government networks." },
+      { id: 71, question: "When students use Wi-Fi in the lab to access websites and send messages worldwide, which system are they using?", options: ["Internet", "Folder network", "File system", "Operating environment"], correctAnswer: 0, explanation: "Wi-Fi provides wireless access to the Internet for browsing websites and communicating." },
+      { id: 72, question: "A teacher sends homework to students electronically using Gmail; what type of communication is this?", options: ["Email", "Video editing", "File compression", "Printing"], correctAnswer: 0, explanation: "Email (electronic mail) is used to send messages and attachments electronically." },
+      { id: 73, question: "Kojo receives a message that contains the sender’s address, subject line and message body; which service uses these features?", options: ["Email", "Search engine", "Browser", "Spreadsheet"], correctAnswer: 0, explanation: "Email messages include sender address, subject line, and message body as standard components." },
+      { id: 74, question: "When composing an email, Ama types a short description of the message topic in a special field; what is this field called?", options: ["Subject", "Header", "Footer", "Attachment"], correctAnswer: 0, explanation: "The subject field in an email provides a brief description of the message content." },
+      { id: 75, question: "A teacher sends a document along with the email message; what is the document called?", options: ["Attachment", "Extension", "Folder", "Template"], correctAnswer: 0, explanation: "Files sent along with an email are called attachments." },
+      { id: 76, question: "A student includes two recipients in the Cc field when sending an email; what does Cc mean?", options: ["Carbon copy", "Computer code", "Central control", "Command control"], correctAnswer: 0, explanation: "Cc stands for Carbon Copy, used to send copies of an email to additional recipients." },
+      { id: 77, question: "Which of the following is a valid example of an email address?", options: ["ama@yahoo.com", "ama@yahoo", "ama#yahoo.com", "ama.com"], correctAnswer: 0, explanation: "A valid email address includes a username, @ symbol, domain name, and extension (e.g., ama@yahoo.com)." },
+      { id: 78, question: "A student sends an email message to multiple recipients without showing their addresses to others; which feature is used?", options: ["Bcc", "Cc", "Reply", "Draft"], correctAnswer: 0, explanation: "Bcc (Blind Carbon Copy) hides recipient addresses from other recipients." },
+      { id: 79, question: "A learner types and edits a letter on the computer using formatting tools like bold and alignment; which software is he using?", options: ["Word processor", "Spreadsheet", "Browser", "Antivirus"], correctAnswer: 0, explanation: "A word processor is used for creating, editing, and formatting text documents." },
+      { id: 80, question: "When typing a report and correcting spelling errors automatically, which application is most suitable?", options: ["Word processor", "Database", "Calculator", "Paint"], correctAnswer: 0, explanation: "Word processors include spell-checking and grammar correction features." },
+      { id: 81, question: "Ama wants to perform calculations and organise numerical data in rows and columns; which application should she use?", options: ["Spreadsheet", "Word processor", "Browser", "Compiler"], correctAnswer: 0, explanation: "Spreadsheets are designed for organizing data in rows and columns and performing calculations." },
+      { id: 82, question: "In Excel, Kofi wants to find the total of values in cells A1 to A5; which function should he use?", options: ["SUM", "COUNT", "MAX", "MIN"], correctAnswer: 0, explanation: "The SUM function adds up a range of values in spreadsheet applications." },
+      { id: 83, question: "A student uses the formula =AVERAGE(B1:B5) in Excel; what will the function calculate?", options: ["Mean value", "Total value", "Maximum value", "Minimum value"], correctAnswer: 0, explanation: "The AVERAGE function calculates the arithmetic mean of a range of values." },
+      { id: 84, question: "When calculating the highest score among students in Excel, which function is most appropriate?", options: ["MAX", "SUM", "COUNT", "AVERAGE"], correctAnswer: 0, explanation: "The MAX function returns the highest value in a range of data." },
+      { id: 85, question: "Ama enters =MIN(C1:C10) in a worksheet; what result will Excel display?", options: ["Smallest value", "Largest value", "Total value", "Number of values"], correctAnswer: 0, explanation: "The MIN function returns the smallest value in a range of data." }
+    ];
+
+    let studentName = "";
+    let studentClass = "";
+    let currentQuestion = 0;
+    let selectedQuestions = [];
+    let userAnswers = [];
+    let quizTimer;
+    let timeRemaining = QUIZ_DURATION;
+
+    const namePage = document.getElementById("namePage");
+    const welcomePage = document.getElementById("welcomePage");
+    const countdownScreen = document.getElementById("countdownScreen");
+    const quizArea = document.getElementById("quizArea");
+    const resultsArea = document.getElementById("resultsArea");
+    const lockMessage = document.getElementById("lockMessage");
+    const adminArea = document.getElementById("adminArea");
+    const adminTableContainer = document.getElementById("adminTableContainer");
+
+    const questionCounter = document.getElementById("questionCounter");
+    const timer = document.getElementById("timer");
+    const questionText = document.getElementById("questionText");
+    const optionsContainer = document.getElementById("optionsContainer");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const submitBtn = document.getElementById("submitBtn");
+
+    const scoreDisplay = document.getElementById("scoreDisplay");
+    const summaryContainer = document.getElementById("summaryContainer");
+
+    function formatTime(s) {
+      const m = Math.floor(s / 60);
+      const rs = s % 60;
+      return `${m}:${rs.toString().padStart(2, '0')}`;
+    }
+
+    const KEY = "quiz_offline_results";
+    function getResults() { const r = localStorage.getItem(KEY); return r ? JSON.parse(r) : []; }
+    function saveResult(res) { const rs = getResults(); rs.push(res); localStorage.setItem(KEY, JSON.stringify(rs)); }
+
+    document.getElementById("proceedBtn").onclick = async () => {
+      const name = document.getElementById("studentName").value.trim();
+      const cls = document.getElementById("studentClass").value.trim();
+      if (!name || !cls) { alert("Enter both name and class!"); return; }
+      
+      const all = getResults();
+      const st = all.filter(r => r.name.toLowerCase() === name.toLowerCase());
+      if (st.length > 0) {
+        const last = st.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
+        const diff = new Date() - new Date(last.timestamp);
+        if (diff < COOLDOWN_HOURS * 3600000) {
+          lockMessage.classList.remove("hidden");
+          lockMessage.innerHTML = `Already taken! Try in ${Math.ceil((COOLDOWN_HOURS*3600000-diff)/60000)} mins.`;
+          return;
+        }
+      }
+      studentName = name; studentClass = cls;
+      namePage.classList.add("hidden"); welcomePage.classList.remove("hidden");
+    };
+
+    document.getElementById("adminLoginBtn").onclick = () => {
+      if (prompt("Password:") === "027922") {
+        namePage.classList.add("hidden"); adminArea.classList.remove("hidden");
+        const res = getResults();
+        if (res.length === 0) { adminTableContainer.innerHTML = "No results."; return; }
+        const groups = {};
+        res.forEach(r => { const d = new Date(r.timestamp).toLocaleDateString(); if(!groups[d]) groups[d]=[]; groups[d].push(r); });
+        let h = "";
+        Object.keys(groups).sort((a,b)=>new Date(b)-new Date(a)).forEach((d, i) => {
+          h += `
+            <div class="date-group">
+              <div class="date-header ${i!==0?'collapsed':''}" onclick="this.nextElementSibling.classList.toggle('hidden'); this.classList.toggle('collapsed')">📅 ${d}</div>
+              <div class="table-container ${i!==0?'hidden':''}">
+                <table class="admin-table">
+                  <thead><tr><th>Name</th><th>Class</th><th>Score</th><th>%</th></tr></thead>
+                  <tbody>${groups[d].map(r=>`<tr><td>${r.name}</td><td>${r.class}</td><td>${r.score}/85</td><td>${r.pct}%</td></tr>`).join('')}</tbody>
+                </table>
+              </div>
+            </div>`;
+        });
+        adminTableContainer.innerHTML = h;
+      }
+    };
+
+    document.getElementById("adminBackBtn").onclick = () => { adminArea.classList.add("hidden"); namePage.classList.remove("hidden"); };
+
+    document.getElementById("startBtn").onclick = () => {
+      welcomePage.classList.add("hidden"); countdownScreen.classList.remove("hidden");
+      let c = 3; countdownScreen.textContent = c;
+      const t = setInterval(() => {
+        c--; if(c>0) countdownScreen.textContent = c;
+        else { clearInterval(t); countdownScreen.classList.add("hidden"); start(); }
+      }, 1000);
+    };
+
+    function start() {
+      selectedQuestions = [...quizData]; userAnswers = new Array(85).fill(null); currentQuestion = 0;
+      quizArea.classList.remove("hidden"); load();
+      quizTimer = setInterval(() => {
+        timeRemaining--; timer.textContent = formatTime(timeRemaining);
+        if(timeRemaining<=0) finish();
+      }, 1000);
+    }
+
+    function load() {
+      const q = selectedQuestions[currentQuestion];
+      questionCounter.textContent = `Question ${currentQuestion+1} of 85`;
+      questionText.textContent = q.question;
+      optionsContainer.innerHTML = "";
+      q.options.forEach(o => {
+        const b = document.createElement("button");
+        b.className = "option-button secondary"+(userAnswers[currentQuestion]===o?" selected":"");
+        b.textContent = o; b.onclick = () => { userAnswers[currentQuestion]=o; load(); };
+        optionsContainer.appendChild(b);
+      });
+      prevBtn.disabled = currentQuestion===0;
+      if(currentQuestion===84) { nextBtn.classList.add("hidden"); submitBtn.classList.remove("hidden"); }
+      else { nextBtn.classList.remove("hidden"); submitBtn.classList.add("hidden"); }
+    }
+
+    prevBtn.onclick = () => { currentQuestion--; load(); };
+    nextBtn.onclick = () => { currentQuestion++; load(); };
+    submitBtn.onclick = () => { if(confirm("Submit?")) finish(); };
+
+    function finish() {
+      clearInterval(quizTimer); quizArea.classList.add("hidden"); resultsArea.classList.remove("hidden");
+      let score = 0;
+      const rev = selectedQuestions.map((q, i) => {
+        const a = userAnswers[i]; const c = q.options[q.correctAnswer];
+        if(a===c) score++;
+        return `<div class="question-review ${a===c?'correct':'wrong'}">
+          <p>Q${i+1}: ${q.question}</p><p>Ans: ${a||'None'} | Correct: ${c}</p>
+          <p style="font-style:italic">💡 ${q.explanation}</p>
+        </div>`;
+      });
+      const pct = Math.round(score/85*100);
+      scoreDisplay.innerHTML = `<h3>${studentName} (${studentClass})</h3><h2>Score: ${score}/85 (${pct}%)</h2>`;
+      summaryContainer.innerHTML = rev.join('');
+      saveResult({ name: studentName, class: studentClass, score, pct, timestamp: new Date().toISOString() });
+    }
+  </script>
+</body>
+</html>

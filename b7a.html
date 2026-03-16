@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yeriel Bracha Computing Quiz</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #ff7b00 0%, #ff9500 50%, #ffb347 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .container {
+      width: 90%;
+      max-width: 900px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 20px;
+      font-size: 2.2em;
+      font-weight: 700;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    h2 {
+      color: #34495e;
+      margin-bottom: 20px;
+      font-size: 1.3em;
+      text-align: center;
+    }
+    
+    .hidden { 
+      display: none; 
+    }
+    
+    /* Name Input Page */
+    .name-section {
+      text-align: center;
+      padding: 20px;
+    }
+    
+    .name-section p {
+      font-size: 1.1em;
+      color: #555;
+      margin-bottom: 20px;
+    }
+    
+    input[type="text"] {
+      width: 100%;
+      max-width: 400px;
+      padding: 15px;
+      border-radius: 10px;
+      border: 2px solid #bdc3c7;
+      font-size: 1.1em;
+      margin: 15px auto;
+      display: block;
+      transition: border-color 0.3s ease;
+    }
+    
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #ff7b00;
+      box-shadow: 0 0 0 3px rgba(255, 123, 0, 0.1);
+    }
+    
+    /* Welcome Page */
+    .welcome-content {
+      text-align: center;
+      padding: 20px;
+    }
+    
+    .quiz-info {
+      background: rgba(255, 123, 0, 0.1);
+      border: 2px solid #ff7b00;
+      border-radius: 15px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    
+    .quiz-info p {
+      margin: 10px 0;
+      font-size: 1.1em;
+      color: #2c3e50;
+    }
+    
+    marquee {
+      background: linear-gradient(135deg, #ff7b00, #ff9500);
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
+      margin: 15px 0;
+      font-weight: bold;
+    }
+    
+    /* Buttons */
+    button {
+      background: linear-gradient(135deg, #ff7b00, #ff9500);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 1.1em;
+      font-weight: 600;
+      margin: 10px;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    button:hover {
+      background: linear-gradient(135deg, #ff9500, #ff7b00);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(255, 123, 0, 0.4);
+    }
+    
+    button:disabled {
+      background: #95a5a6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    button.secondary {
+      background: #ecf0f1;
+      color: #2c3e50;
+      text-transform: none;
+      letter-spacing: normal;
+      padding: 12px 20px;
+      margin: 5px;
+      border-radius: 10px;
+      font-weight: normal;
+    }
+    
+    button.secondary:hover {
+      background: #bdc3c7;
+      transform: translateY(-1px);
+    }
+    
+    button.selected {
+      background: linear-gradient(135deg, #27ae60, #2ecc71) !important;
+      color: white !important;
+    }
+    
+    /* Countdown Screen */
+    .countdown-screen {
+      text-align: center;
+      padding: 60px 20px;
+      font-size: 4em;
+      font-weight: bold;
+      color: #ff7b00;
+      animation: pulse 1s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.1); opacity: 1; }
+    }
+    
+    /* Quiz Area */
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding: 15px;
+      background: rgba(255, 123, 0, 0.1);
+      border-radius: 10px;
+    }
+    
+    .question-counter {
+      font-weight: bold;
+      color: #2c3e50;
+      font-size: 1.1em;
+    }
+    
+    .timer {
+      font-weight: bold;
+      color: #e74c3c;
+      font-size: 1.2em;
+      padding: 8px 15px;
+      background: rgba(231, 76, 60, 0.1);
+      border-radius: 20px;
+    }
+    
+    .timer.warning {
+      animation: blink 1s infinite;
+    }
+    
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0.5; }
+    }
+    
+    .question-content {
+      background: rgba(255, 255, 255, 0.8);
+      padding: 25px;
+      border-radius: 15px;
+      margin-bottom: 25px;
+      border-left: 5px solid #ff7b00;
+    }
+    
+    .question-text {
+      font-size: 1.2em;
+      color: #2c3e50;
+      font-weight: 600;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+    
+    .option-button {
+      text-align: left;
+      padding: 15px 20px;
+      border-radius: 10px;
+      font-size: 1em;
+      line-height: 1.4;
+      word-wrap: break-word;
+    }
+    
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 30px;
+    }
+    
+    .nav-buttons {
+      display: flex;
+      gap: 10px;
+    }
+    
+    /* Results */
+    .results {
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .score-display {
+      background: linear-gradient(135deg, #2ecc71, #27ae60);
+      color: white;
+      padding: 25px;
+      border-radius: 15px;
+      margin: 20px 0;
+      font-size: 1.3em;
+    }
+    
+    .summary {
+      text-align: left;
+      margin-top: 30px;
+      padding: 20px;
+      background: rgba(236, 240, 241, 0.8);
+      border-radius: 15px;
+    }
+    
+    .summary h3 {
+      color: #2c3e50;
+      margin-bottom: 20px;
+      text-align: center;
+      font-size: 1.4em;
+    }
+    
+    .question-review {
+      margin: 15px 0;
+      padding: 15px;
+      background: white;
+      border-radius: 10px;
+      border-left: 4px solid #bdc3c7;
+    }
+    
+    .question-review.correct {
+      border-left-color: #27ae60;
+    }
+    
+    .question-review.wrong {
+      border-left-color: #e74c3c;
+    }
+    
+    .correct { 
+      color: #27ae60; 
+      font-weight: bold; 
+    }
+    
+    .wrong { 
+      color: #e74c3c; 
+      font-weight: bold; 
+    }
+    
+    /* Footer */
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      padding: 20px;
+      background: linear-gradient(135deg, #2c3e50, #34495e);
+      color: white;
+      border-radius: 15px;
+      font-size: 14px;
+    }
+    
+    /* Lock Message */
+    .lock-message {
+      text-align: center;
+      color: #e74c3c;
+      font-weight: bold;
+      background: rgba(231, 76, 60, 0.1);
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 15px;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px;
+        margin: 10px;
+        width: calc(100% - 20px);
+      }
+      
+      h1 {
+        font-size: 1.8em;
+      }
+      
+      .countdown-screen {
+        font-size: 3em;
+        padding: 40px 20px;
+      }
+      
+      .quiz-header {
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .controls {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .nav-buttons {
+        width: 100%;
+        justify-content: space-between;
+      }
+      
+      button {
+        padding: 12px 20px;
+        font-size: 1em;
+      }
+    }
+    
+    /* Admin Section Styles */
+    .admin-section {
+      padding: 20px;
+      overflow-x: auto;
+    }
+    
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    
+    .admin-table th, .admin-table td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .admin-table th {
+      background: #f8f9fa;
+      color: #2c3e50;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.85em;
+      letter-spacing: 0.5px;
+    }
+    
+    .admin-table tr:hover {
+      background: #fcfcfc;
+    }
+    
+    .admin-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .admin-btn {
+      background: #34495e;
+      font-size: 0.8em;
+      padding: 8px 15px;
+      opacity: 0.7;
+    }
+    
+    .admin-btn:hover {
+      opacity: 1;
+      background: #2c3e50;
+    }
+    
+    .date-group {
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    
+    .date-header {
+      background: #f1f3f5;
+      padding: 12px 20px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+    
+    .date-header:hover {
+      background: #e9ecef;
+    }
+    
+    .date-header::after {
+      content: '▼';
+      font-size: 0.8em;
+      transition: transform 0.3s;
+    }
+    
+    .date-header.collapsed::after {
+      transform: rotate(-90deg);
+    }
+    
+    .table-container.hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Name Input Page -->
+    <div id="namePage" class="name-section">
+      <h1>🎓 Yeriel Bracha Computing Quiz</h1>
+      <p>Welcome! Please enter your details to begin the quiz.</p>
+      <input type="text" id="studentName" placeholder="Enter your full name" />
+      <input type="text" id="studentClass" placeholder="Enter your class (e.g., Basic 7)" />
+      <button id="proceedBtn">Proceed to Quiz</button>
+      <div id="lockMessage" class="lock-message hidden"></div>
+      <div style="margin-top: 30px;">
+        <button id="adminLoginBtn" class="secondary admin-btn">🔐 Admin Portal</button>
+      </div>
+    </div>
+
+    <!-- Welcome Page -->
+    <div id="welcomePage" class="welcome-content hidden">
+      <h1>Welcome to Quizzilla! 🚀</h1>
+      <div class="quiz-info">
+        <p>📚 <strong>Subject:</strong> Introduction to Computing - BECE Mock Test</p>
+        <marquee>Just select the correct answer for each question!</marquee>
+        <p>⏱️ <strong>Time Limit:</strong> 30 minutes</p>
+        <p>❓ <strong>Questions:</strong> 40 questions (all questions included)</p>
+        <p>🎯 <strong>Instructions:</strong> Use Next and Previous to navigate, click Submit when done</p>
+      </div>
+      <button id="startBtn">🎯 Sure, Let's Start Quiz!</button>
+    </div>
+
+    <!-- Countdown Screen -->
+    <div id="countdownScreen" class="countdown-screen hidden"></div>
+
+    <!-- Quiz Area -->
+    <div id="quizArea" class="hidden">
+      <div class="quiz-header">
+        <div class="question-counter" id="questionCounter">Question 1 of 40</div>
+        <div class="timer" id="timer">30:00</div>
+      </div>
+      
+      <div class="question-content">
+        <div class="question-text" id="questionText"></div>
+        <div class="options-grid" id="optionsContainer"></div>
+      </div>
+      
+      <div class="controls">
+        <div class="nav-buttons">
+          <button type="button" id="prevBtn" class="secondary">← Previous</button>
+          <button type="button" id="nextBtn">Next →</button>
+        </div>
+        <button type="button" id="submitBtn" class="hidden">🎯 Submit Quiz</button>
+      </div>
+    </div>
+
+    <!-- Results Area -->
+    <div id="resultsArea" class="results hidden">
+      <h1>🎉 Quiz Completed!</h1>
+      <div id="scoreDisplay" class="score-display"></div>
+      <div id="summaryContainer" class="summary"></div>
+      <button onclick="location.reload()" class="secondary">Close & New Session</button>
+    </div>
+
+    <!-- Admin Area -->
+    <div id="adminArea" class="admin-section hidden">
+      <div class="admin-controls">
+        <h2>📊 Student Results Dashboard</h2>
+        <button id="adminBackBtn" class="secondary">← Back</button>
+      </div>
+      <div id="adminTableContainer">
+        <p>Loading scores...</p>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p><strong>Yeriel Bracha Coding Club</strong><br>© 2025 - Excellence in Computing Education</p>
+    </footer>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getDatabase, ref, get, set, push } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCY9oturc9bql33PSUkfNUptcHXla2RWN4",
+      authDomain: "tracha-xx.firebaseapp.com",
+      databaseURL: "https://tracha-xx-default-rtdb.firebaseio.com",
+      projectId: "tracha-xx",
+      storageBucket: "tracha-xx.appspot.com",
+      messagingSenderId: "914440906583",
+      appId: "1:914440906583:web:123abc456xyz"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // Quiz Configuration
+    const QUIZ_DURATION = 30 * 60; // 30 minutes in seconds
+      const quizData = [
+  {
+    id: 1,
+    question: "What are the two main aspects of the dual nature of network systems?",
+    options: [
+      "Hardware and Software components",
+      "Physical components and Logical/Physical layout",
+      "Clients and Servers",
+      "LAN and WAN connections"
+    ],
+    correctAnswer: 1,
+    explanation: "Network systems have a dual nature consisting of Physical Components (tangible devices) and Logical/Physical Layout (architectural arrangement and data flow pathways)."
+  },
+  {
+    id: 2,
+    question: "What is a client in a network?",
+    options: [
+      "A dedicated computer that stores shared data",
+      "A device that connects to the network to access shared resources",
+      "A device that routes data between networks",
+      "A central hub that manages network traffic"
+    ],
+    correctAnswer: 1,
+    explanation: "A client is a computer or device that connects to the network to access shared resources, such as personal computers, laptops, and mobile devices."
+  },
+  {
+    id: 3,
+    question: "What is the primary function of a server?",
+    options: [
+      "To connect multiple networks together",
+      "To broadcast data to all connected devices",
+      "To store and manage shared data and resources while managing access and security",
+      "To convert digital signals to analog"
+    ],
+    correctAnswer: 2,
+    explanation: "A server is a dedicated computer or software that stores and manages shared data and resources, and is responsible for managing access and providing security."
+  },
+  {
+    id: 4,
+    question: "How does a hub process data?",
+    options: [
+      "It examines data and routes it only to the intended device",
+      "It converts digital signals to analog",
+      "It receives data and broadcasts it to all connected devices",
+      "It stores data for later retrieval"
+    ],
+    correctAnswer: 2,
+    explanation: "A hub is considered a passive device because it performs no processing—it simply receives data and broadcasts it to all connected devices."
+  },
+  {
+    id: 5,
+    question: "What makes a switch different from a hub?",
+    options: [
+      "It's less expensive than a hub",
+      "It only works with wireless connections",
+      "It's an active device that examines data and routes it only to the intended device",
+      "It requires no power to operate"
+    ],
+    correctAnswer: 2,
+    explanation: "A switch is an advanced active device that examines received data, processes it, and routes it only to the intended device."
+  },
+  {
+    id: 6,
+    question: "What is the primary function of a router?",
+    options: [
+      "To connect devices on a single LAN",
+      "To convert digital signals to analog",
+      "To connect multiple different networks together and route data between them",
+      "To provide physical connections between devices"
+    ],
+    correctAnswer: 2,
+    explanation: "A router connects multiple different networks together, routes data between them, and provides security and network management features."
+  },
+  {
+    id: 7,
+    question: "What does a modem do?",
+    options: [
+      "Connects multiple devices on a LAN",
+      "Connects a network to the Internet and converts digital data to analog signals",
+      "Routes data between different networks",
+      "Provides physical connections using cables"
+    ],
+    correctAnswer: 1,
+    explanation: "A modem connects a network to the Internet and converts digital data from the computer into an analog signal for transmission over telephone or cable lines."
+  },
+  {
+    id: 8,
+    question: "Which cable type is standard for LANs?",
+    options: [
+      "Fiber optic",
+      "Coaxial",
+      "Ethernet (Cat5, Cat5e, Cat6, Cat6a)",
+      "USB"
+    ],
+    correctAnswer: 2,
+    explanation: "Ethernet cables (Cat5, Cat5e, Cat6, Cat6a) are the standard for LANs, while fiber optic is used for high-speed connections over longer distances."
+  },
+  {
+    id: 9,
+    question: "What is a network topology?",
+    options: [
+      "The type of cables used in a network",
+      "The speed of data transmission",
+      "The physical and logical layout of the devices on a network",
+      "The brand of networking equipment"
+    ],
+    correctAnswer: 2,
+    explanation: "A network topology is the physical and logical layout of the devices on a network."
+  },
+  {
+    id: 10,
+    question: "What are the characteristics of a Point-to-Point topology?",
+    options: [
+      "All devices share a single cable",
+      "Direct connection without a central hub, simple and inexpensive but unscalable",
+      "Devices connect to a central hub",
+      "Devices are connected in a loop"
+    ],
+    correctAnswer: 1,
+    explanation: "Point-to-Point topology features a direct connection without a central hub. It's simple, easy to set up, and inexpensive, but not scalable."
+  },
+  {
+    id: 11,
+    question: "How is data transmitted in a Bus topology?",
+    options: [
+      "Through a central hub that forwards data",
+      "Via direct connections between all devices",
+      "All devices share a single cable and listen for intended data",
+      "Data is sent around a loop in one direction"
+    ],
+    correctAnswer: 2,
+    explanation: "In Bus topology, all devices share a single cable and listen for data intended for them."
+  },
+  {
+    id: 12,
+    question: "What is the main vulnerability of a Bus topology?",
+    options: [
+      "Expensive to set up",
+      "Requires complex routing protocols",
+      "Highly vulnerable to a single point of failure on the main bus",
+      "Difficult to add new devices"
+    ],
+    correctAnswer: 2,
+    explanation: "Bus topology is highly vulnerable to a single point of failure on the main bus cable."
+  },
+  {
+    id: 13,
+    question: "How is data routed in a Star topology?",
+    options: [
+      "All devices share a single cable",
+      "Each device connects directly to every other device",
+      "All devices connect to a central hub which forwards data to the correct device",
+      "Data passes through each device in a loop"
+    ],
+    correctAnswer: 2,
+    explanation: "In Star topology, all devices connect to a central hub, which forwards data to the correct device."
+  },
+  {
+    id: 14,
+    question: "What happens if one endpoint device fails in a Star topology?",
+    options: [
+      "The entire network goes down",
+      "Only that device is affected; the rest of the network remains operational",
+      "Data can no longer be transmitted in any direction",
+      "The central hub automatically shuts down"
+    ],
+    correctAnswer: 1,
+    explanation: "In Star topology, if one endpoint device fails, the rest of the network remains operational—only that device is affected."
+  },
+  {
+    id: 15,
+    question: "What is the primary weakness of a Star topology?",
+    options: [
+      "Difficult to add new devices",
+      "Slow data transmission speeds",
+      "The entire network is vulnerable to a failure of the central hub",
+      "Requires more cables than Mesh topology"
+    ],
+    correctAnswer: 2,
+    explanation: "The main weakness of Star topology is that the entire network is vulnerable to a failure of the central hub."
+  },
+  {
+    id: 16,
+    question: "How are devices connected in a Ring topology?",
+    options: [
+      "All devices connect to a central hub",
+      "All devices share a single cable",
+      "Each device connects directly to every other device",
+      "All devices connect in a loop, with each device connected to exactly two others"
+    ],
+    correctAnswer: 3,
+    explanation: "Ring topology connects all devices in a loop, with each device connected to exactly two others. Data is sent around the ring in one direction."
+  },
+  {
+    id: 17,
+    question: "What is a strength of Ring topology?",
+    options: [
+      "Lowest cost of all topologies",
+      "More reliable than Bus topology; isolated device failures can sometimes be bypassed",
+      "Simplest to set up",
+      "Requires the fewest cables"
+    ],
+    correctAnswer: 1,
+    explanation: "Ring topology is more reliable than Bus topology because isolated device failures can sometimes be bypassed."
+  },
+  {
+    id: 18,
+    question: "What causes a complete network failure in Ring topology?",
+    options: [
+      "Failure of the central hub",
+      "Failure of any single endpoint device",
+      "If the ring itself fails and breaks the loop",
+      "If too many devices are connected"
+    ],
+    correctAnswer: 2,
+    explanation: "Ring topology is vulnerable to a complete network drop if the ring itself fails and breaks the loop."
+  },
+  {
+    id: 19,
+    question: "How are devices connected in a Mesh topology?",
+    options: [
+      "All devices connect to a central hub",
+      "Each device connects to exactly two others in a loop",
+      "Each device has a direct, dedicated connection to every other device on the network",
+      "Devices share a single communication line"
+    ],
+    correctAnswer: 2,
+    explanation: "In Mesh topology, each device has a direct, dedicated connection to every other device on the network."
+  },
+  {
+    id: 20,
+    question: "What is the primary advantage of Mesh topology?",
+    options: [
+      "Lowest cost to implement",
+      "Simplest to maintain",
+      "Provides the absolute highest level of redundancy and reliability",
+      "Easiest to set up"
+    ],
+    correctAnswer: 2,
+    explanation: "Mesh topology provides the absolute highest level of redundancy and reliability."
+  },
+  {
+    id: 21,
+    question: "What are the disadvantages of Mesh topology?",
+    options: [
+      "Low redundancy and reliability",
+      "Slow data transmission speeds",
+      "The most complex and expensive topology to set up and maintain due to the volume of connections required",
+      "Cannot be expanded"
+    ],
+    correctAnswer: 2,
+    explanation: "Mesh topology is the most complex and expensive topology to set up and maintain due to the sheer volume of connections required."
+  },
+  {
+    id: 22,
+    question: "What is a Tree topology?",
+    options: [
+      "A simple point-to-point connection",
+      "A combination of a bus and a star topology",
+      "A variation of mesh topology",
+      "A wireless-only topology"
+    ],
+    correctAnswer: 1,
+    explanation: "Tree topology is a combination topology—a combination of a bus and a star topology, featuring a central hub connected to multiple branches."
+  },
+  {
+    id: 23,
+    question: "When is Tree topology typically used?",
+    options: [
+      "For small home networks",
+      "For wireless connections only",
+      "For larger networks like schools and businesses connecting multiple sub-networks",
+      "For temporary network setups"
+    ],
+    correctAnswer: 2,
+    explanation: "Tree topology is ideal for larger networks such as schools and businesses that need to connect multiple sub-networks."
+  },
+  {
+    id: 24,
+    question: "What is the trade-off of Tree topology?",
+    options: [
+      "It lacks central management",
+      "It provides no scalability",
+      "It provides a central point of management but remains vulnerable if the central hub or a primary branch fails",
+      "It's the most expensive topology"
+    ],
+    correctAnswer: 2,
+    explanation: "Tree topology provides a central point of management but remains vulnerable if the central hub or a primary branch fails."
+  },
+  {
+    id: 25,
+    question: "What is a Hybrid topology?",
+    options: [
+      "A simple bus topology",
+      "A combination of two or more different types of topologies",
+      "A wireless-only topology",
+      "A topology that uses only fiber optic cables"
+    ],
+    correctAnswer: 1,
+    explanation: "Hybrid topology is a combination of two or more different types of topologies."
+  },
+  {
+    id: 26,
+    question: "What is the main strength of Hybrid topology?",
+    options: [
+      "Lowest implementation cost",
+      "Simplest to design",
+      "Allows designers to combine strengths of different topologies and is highly customizable",
+      "Requires no maintenance"
+    ],
+    correctAnswer: 2,
+    explanation: "Hybrid topology allows designers to combine strengths (e.g., reliability of ring with flexibility of mesh) and is highly customizable to specific organizational needs."
+  },
+  {
+    id: 27,
+    question: "What are the weaknesses of Hybrid topology?",
+    options: [
+      "Limited customization options",
+      "Low reliability",
+      "Inherently more expensive and complex to design, set up, and maintain",
+      "Cannot be expanded"
+    ],
+    correctAnswer: 2,
+    explanation: "Hybrid topology is inherently more expensive and complex to design, set up, and maintain."
+  },
+  {
+    id: 28,
+    question: "According to the Topology Matrix, which topologies offer premium performance but demand significant infrastructure investment?",
+    options: [
+      "Bus and Ring",
+      "Star and Point-to-Point",
+      "Mesh and Hybrid",
+      "Bus and Star"
+    ],
+    correctAnswer: 2,
+    explanation: "Mesh and Hybrid topologies offer premium performance but demand significant infrastructure investment."
+  },
+  {
+    id: 29,
+    question: "What is the primary strength of Bus topology according to the Reliability and Vulnerability Assessment?",
+    options: [
+      "Maximum Redundancy",
+      "Central Management",
+      "Easy Setup",
+      "Scalability"
+    ],
+    correctAnswer: 2,
+    explanation: "Bus topology's primary strength is Easy Setup."
+  },
+  {
+    id: 30,
+    question: "What is the key vulnerability of Star topology?",
+    options: [
+      "Single point of failure on the main cable",
+      "Entire network drops if the ring loop breaks",
+      "Entire network drops if central hub fails",
+      "Cost and overwhelming complexity"
+    ],
+    correctAnswer: 2,
+    explanation: "Star topology's key vulnerability is that the entire network drops if the central hub fails."
+  },
+  {
+    id: 31,
+    question: "What is the primary strength of Ring topology?",
+    options: [
+      "Easy Setup",
+      "Central Management",
+      "Predictable Data Flow",
+      "Maximum Redundancy"
+    ],
+    correctAnswer: 2,
+    explanation: "Ring topology's primary strength is Predictable Data Flow."
+  },
+  {
+    id: 32,
+    question: "What is the key vulnerability of Mesh topology?",
+    options: [
+      "Single point of failure",
+      "Entire network drops if hub fails",
+      "Cost and overwhelming complexity",
+      "Vulnerability at central branches"
+    ],
+    correctAnswer: 2,
+    explanation: "Mesh topology's key vulnerabilities are cost and overwhelming complexity."
+  },
+  {
+    id: 33,
+    question: "What is the primary strength of Tree topology?",
+    options: [
+      "Easy Setup",
+      "Predictable Data Flow",
+      "Maximum Redundancy",
+      "Scalability"
+    ],
+    correctAnswer: 3,
+    explanation: "Tree topology's primary strength is Scalability."
+  },
+  {
+    id: 34,
+    question: "What dictates internal network efficiency according to the document?",
+    options: [
+      "The type of cables used",
+      "The number of connected devices",
+      "The choice between passive hardware (Hubs) and active processing (Switches/Routers)",
+      "The physical location of servers"
+    ],
+    correctAnswer: 2,
+    explanation: "The choice between passive hardware (Hubs) and active processing (Switches/Routers) dictates internal network efficiency."
+  },
+  {
+    id: 35,
+    question: "What do linear architectures like Bus and Ring offer?",
+    options: [
+      "Maximum redundancy at low cost",
+      "Cost savings at the expense of widespread vulnerabilities",
+      "Complex management with high reliability",
+      "Scalability with minimal investment"
+    ],
+    correctAnswer: 1,
+    explanation: "Linear architectures (Bus, Ring) offer cost savings at the expense of widespread vulnerabilities."
+  },
+  {
+    id: 36,
+    question: "What do advanced architectures like Mesh and Hybrid eliminate?",
+    options: [
+      "The need for cables",
+      "The need for network management",
+      "Single points of failure",
+      "The need for active devices"
+    ],
+    correctAnswer: 2,
+    explanation: "Advanced architectures (Mesh, Hybrid) eliminate single points of failure."
+  },
+  {
+    id: 37,
+    question: "What is required for advanced architectures like Mesh and Hybrid?",
+    options: [
+      "Minimal physical connections",
+      "Wireless technology only",
+      "Extensive physical connections and rigorous maintenance",
+      "No specialized equipment"
+    ],
+    correctAnswer: 2,
+    explanation: "Advanced architectures require extensive physical connections and rigorous maintenance."
+  },
+  {
+    id: 38,
+    question: "Which topology provides a central point of control and management?",
+    options: [
+      "Bus",
+      "Ring",
+      "Star",
+      "Mesh"
+    ],
+    correctAnswer: 2,
+    explanation: "Star topology provides a central point of control and management through its central hub."
+  },
+  {
+    id: 39,
+    question: "Which topology is described as having each device connected to exactly two others?",
+    options: [
+      "Star",
+      "Bus",
+      "Mesh",
+      "Ring"
+    ],
+    correctAnswer: 3,
+    explanation: "In Ring topology, each device is connected to exactly two others, forming a loop."
+  },
+  {
+    id: 40,
+    question: "Which topology would be most appropriate for an organization requiring maximum redundancy regardless of cost?",
+    options: [
+      "Bus Topology",
+      "Star Topology",
+      "Ring Topology",
+      "Mesh Topology"
+    ],
+    correctAnswer: 3,
+    explanation: "Mesh topology provides the absolute highest level of redundancy and reliability, making it suitable for organizations where network uptime is critical, regardless of cost."
+  }
+];
+
+    // Export for use in different environments
+    if (typeof module !== 'undefined' && module.exports) {
+      module.exports = quizData;
+    }
+
+    const TOTAL_QUESTIONS = quizData.length; // Dynamically set to match data length
+
+
+    // Global Variables
+    let studentName = "";
+    let studentClass = "";
+    let currentQuestion = 0;
+    let selectedQuestions = [];
+    let userAnswers = [];
+    let quizTimer;
+    let timeRemaining = QUIZ_DURATION;
+    let quizStarted = false;
+
+    // DOM Elements
+    const namePage = document.getElementById("namePage");
+    const welcomePage = document.getElementById("welcomePage");
+    const countdownScreen = document.getElementById("countdownScreen");
+    const quizArea = document.getElementById("quizArea");
+    const resultsArea = document.getElementById("resultsArea");
+    const lockMessage = document.getElementById("lockMessage");
+    const adminArea = document.getElementById("adminArea");
+    const adminTableContainer = document.getElementById("adminTableContainer");
+
+    // Quiz Elements
+    const questionCounter = document.getElementById("questionCounter");
+    const timer = document.getElementById("timer");
+    const questionText = document.getElementById("questionText");
+    const optionsContainer = document.getElementById("optionsContainer");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const submitBtn = document.getElementById("submitBtn");
+
+    // Results Elements
+    const scoreDisplay = document.getElementById("scoreDisplay");
+    const summaryContainer = document.getElementById("summaryContainer");
+
+    // Utility Functions
+    function formatTime(seconds) {
+      const minutes = Math.floor(seconds / 60);
+      const remainingSeconds = seconds % 60;
+      return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+    }
+
+    // Check Student Eligibility
+    async function checkStudentEligibility(name) {
+      try {
+        const studentRef = ref(db, `quizResults`);
+        const snapshot = await get(studentRef);
+        
+        if (!snapshot.exists()) {
+          return { canTake: true };
+        }
+
+        const allScores = snapshot.val();
+        const studentScores = Object.values(allScores).filter(score => 
+          score.name && score.name.toLowerCase() === name.toLowerCase()
+        );
+
+        if (studentScores.length === 0) {
+          return { canTake: true };
+        }
+
+        // Find most recent submission
+        const lastSubmission = studentScores.sort((a, b) => 
+          new Date(b.date) - new Date(a.date)
+        )[0];
+
+        const lastSubmissionTime = new Date(lastSubmission.date);
+        const now = new Date();
+        const timeDiff = now - lastSubmissionTime;
+        const hoursDiff = timeDiff / (1000 * 60 * 60);
+
+        if (hoursDiff < COOLDOWN_HOURS) {
+          const remainingTime = (COOLDOWN_HOURS * 60 * 60 * 1000) - timeDiff;
+          return { 
+            canTake: false, 
+            remainingTime: remainingTime,
+            lastScore: lastSubmission.total || 0,
+            lastPercentage: Math.round((lastSubmission.total || 0) / TOTAL_QUESTIONS * 100)
+          };
+        }
+
+        return { canTake: true };
+      } catch (error) {
+        console.error("Error checking eligibility:", error);
+        return { canTake: true };
+      }
+    }
+
+    // Event Listeners
+    document.getElementById("proceedBtn").addEventListener("click", async () => {
+      const nameInput = document.getElementById("studentName").value.trim();
+      const classInput = document.getElementById("studentClass").value.trim();
+      
+      if (!nameInput || !classInput) {
+        alert("Please enter both your name and class before proceeding!");
+        return;
+      }
+      
+      studentName = nameInput;
+      studentClass = classInput;
+      const eligibility = await checkStudentEligibility(studentName);
+      
+      if (!eligibility.canTake) {
+        const hours = Math.floor(eligibility.remainingTime / (1000 * 60 * 60));
+        const minutes = Math.floor((eligibility.remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+        
+        lockMessage.classList.remove("hidden");
+        lockMessage.innerHTML = `
+          <p>⏰ You have already completed this quiz recently.</p>
+          <p>Last Score: ${eligibility.lastScore}/${TOTAL_QUESTIONS} (${eligibility.lastPercentage}%)</p>
+          <p>You can try again in: ${hours}h ${minutes}m</p>
+        `;
+        return;
+      }
+
+      namePage.classList.add("hidden");
+      welcomePage.classList.remove("hidden");
+    });
+
+    // Admin Dashboard Logic
+    document.getElementById("adminLoginBtn").addEventListener("click", () => {
+      const password = prompt("Please enter the admin password:");
+      if (password === "027922") {
+        showAdminArea();
+      } else if (password !== null) {
+        alert("Incorrect password!");
+      }
+    });
+
+    document.getElementById("adminBackBtn").addEventListener("click", () => {
+      adminArea.classList.add("hidden");
+      namePage.classList.remove("hidden");
+    });
+
+    async function showAdminArea() {
+      namePage.classList.add("hidden");
+      adminArea.classList.remove("hidden");
+      await fetchAndDisplayScores();
+    }
+
+    async function fetchAndDisplayScores() {
+      adminTableContainer.innerHTML = "<p>Loading encrypted scores...</p>";
+      try {
+        const scoresRef = ref(db, "quizResults");
+        const snapshot = await get(scoresRef);
+        
+        if (!snapshot.exists()) {
+          adminTableContainer.innerHTML = "<p>No results found in database.</p>";
+          return;
+        }
+
+        const data = snapshot.val();
+        const scoresArray = Object.values(data).sort((a, b) => 
+          new Date(b.timestamp || b.date) - new Date(a.timestamp || a.date)
+        );
+
+        // Group by Date String (MM/DD/YYYY)
+        const groups = {};
+        scoresArray.forEach(record => {
+          const dateStr = new Date(record.timestamp || record.date).toLocaleDateString();
+          if (!groups[dateStr]) groups[dateStr] = [];
+          groups[dateStr].push(record);
+        });
+
+        let accordionHTML = "";
+        
+        Object.keys(groups).sort((a, b) => new Date(b) - new Date(a)).forEach((date, index) => {
+          const groupScores = groups[date];
+          const isFirst = index === 0;
+          
+          accordionHTML += `
+            <div class="date-group">
+              <div class="date-header ${!isFirst ? 'collapsed' : ''}" onclick="this.nextElementSibling.classList.toggle('hidden'); this.classList.toggle('collapsed')">
+                📅 ${date} (${groupScores.length} Student${groupScores.length > 1 ? 's' : ''})
+              </div>
+              <div class="table-container ${!isFirst ? 'hidden' : ''}">
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Class</th>
+                      <th>Score</th>
+                      <th>%</th>
+                      <th>Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${groupScores.map(record => `
+                      <tr>
+                        <td><strong>${record.name}</strong></td>
+                        <td>${record.class || 'N/A'}</td>
+                        <td>${record.total} / ${TOTAL_QUESTIONS}</td>
+                        <td>${record.percentage}%</td>
+                        <td>${formatTime(record.timeUsed)}</td>
+                      </tr>
+                    `).join('')}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          `;
+        });
+
+        adminTableContainer.innerHTML = accordionHTML;
+      } catch (error) {
+        console.error("Fetch Error:", error);
+        adminTableContainer.innerHTML = `<p style="color: red;">Error fetching scores: ${error.message}</p>`;
+      }
+    }
+
+    document.getElementById("startBtn").addEventListener("click", () => {
+      welcomePage.classList.add("hidden");
+      startCountdown();
+    });
+
+    // Countdown Function
+    function startCountdown() {
+      countdownScreen.classList.remove("hidden");
+      let counter = 3;
+      countdownScreen.textContent = `Get Ready... ${counter}`;
+
+      const countdown = setInterval(() => {
+        counter--;
+        if (counter > 0) {
+          countdownScreen.textContent = `${counter}...`;
+        } else {
+          clearInterval(countdown);
+          countdownScreen.textContent = "Begin!";
+          setTimeout(() => {
+            countdownScreen.classList.add("hidden");
+            initializeQuiz();
+          }, 800);
+        }
+      }, 1000);
+    }
+
+    // Initialize Quiz
+    function initializeQuiz() {
+      // Use all 80 questions in order
+      selectedQuestions = [...quizData];
+      userAnswers = new Array(TOTAL_QUESTIONS).fill(null);
+      currentQuestion = 0;
+      quizStarted = true;
+      
+      quizArea.classList.remove("hidden");
+      loadQuestion();
+      startTimer();
+      
+      // Prevent page refresh
+      window.addEventListener('beforeunload', function (e) {
+        if (quizStarted) {
+          e.preventDefault();
+          e.returnValue = '';
+        }
+      });
+    }
+
+    // Load Question
+    function loadQuestion() {
+      const question = selectedQuestions[currentQuestion];
+      
+      // Update counter
+      questionCounter.textContent = `Question ${currentQuestion + 1} of ${TOTAL_QUESTIONS}`;
+      
+      // Update question text
+      questionText.textContent = question.question;
+      
+      // Clear and populate options
+      optionsContainer.innerHTML = "";
+      question.options.forEach((option, index) => {
+        const button = document.createElement("button");
+        button.className = "option-button secondary";
+        button.textContent = option;
+        
+        if (userAnswers[currentQuestion] === option) {
+          button.classList.add("selected");
+        }
+        
+        button.addEventListener("click", () => selectAnswer(option));
+        optionsContainer.appendChild(button);
+      });
+      
+      // Update navigation buttons
+      prevBtn.disabled = currentQuestion === 0;
+      
+      if (currentQuestion === TOTAL_QUESTIONS - 1) {
+        nextBtn.classList.add("hidden");
+        submitBtn.classList.remove("hidden");
+      } else {
+        nextBtn.classList.remove("hidden");
+        submitBtn.classList.add("hidden");
+      }
+    }
+
+    // Select Answer
+    function selectAnswer(answer) {
+      userAnswers[currentQuestion] = answer;
+      loadQuestion(); // Refresh to show selection
+    }
+
+    // Navigation
+    prevBtn.addEventListener("click", () => {
+      if (currentQuestion > 0) {
+        currentQuestion--;
+        loadQuestion();
+      }
+    });
+
+    nextBtn.addEventListener("click", () => {
+      if (currentQuestion < TOTAL_QUESTIONS - 1) {
+        currentQuestion++;
+        loadQuestion();
+      }
+    });
+
+    submitBtn.addEventListener("click", () => {
+      if (confirm("Are you sure you want to submit your quiz? You cannot change answers after submission.")) {
+        finishQuiz();
+      }
+    });
+
+    // Timer Functions
+    function startTimer() {
+      updateTimerDisplay();
+      quizTimer = setInterval(() => {
+        timeRemaining--;
+        updateTimerDisplay();
+        
+        if (timeRemaining <= 0) {
+          clearInterval(quizTimer);
+          autoSubmitQuiz();
+        }
+      }, 1000);
+    }
+
+    function updateTimerDisplay() {
+      timer.textContent = formatTime(timeRemaining);
+      
+      // Add warning class for last 5 minutes
+      if (timeRemaining <= 300) {
+        timer.classList.add("warning");
+      }
+    }
+
+    function stopTimer() {
+      if (quizTimer) {
+        clearInterval(quizTimer);
+      }
+    }
+
+    // Auto Submit
+    function autoSubmitQuiz() {
+      alert("Time's up! Your quiz will be submitted automatically.");
+      finishQuiz(true);
+    }
+
+    // Finish Quiz
+    async function finishQuiz(isAutoSubmit = false) {
+      quizStarted = false;
+      stopTimer();
+      
+      quizArea.classList.add("hidden");
+      resultsArea.classList.remove("hidden");
+      
+      // Calculate score
+      let correctAnswers = 0;
+      const reviewHTML = [];
+      
+      selectedQuestions.forEach((question, index) => {
+        const userAnswer = userAnswers[index] || "(No answer)";
+        const correctAnswerText = question.options[question.correctAnswer];
+        const isCorrect = userAnswer === correctAnswerText;
+        
+        if (isCorrect) correctAnswers++;
+        
+        reviewHTML.push(`
+          <div class="question-review ${isCorrect ? 'correct' : 'wrong'}">
+            <p><strong>Q${index + 1}:</strong> ${question.question}</p>
+            <p>Your answer: <span class="${isCorrect ? 'correct' : 'wrong'}">${userAnswer}</span></p>
+            <p>Correct answer: <span class="correct">${correctAnswerText}</span></p>
+            <p style="margin-top: 10px; font-style: italic; color: #555;">💡 ${question.explanation}</p>
+          </div>
+        `);
+      });
+      
+      const percentage = Math.round((correctAnswers / TOTAL_QUESTIONS) * 100);
+      const timeUsed = QUIZ_DURATION - timeRemaining;
+      
+      // Display results
+      scoreDisplay.innerHTML = `
+        <h2>📊 Your Results</h2>
+        <p><strong>Student:</strong> ${studentName}</p>
+        <p><strong>Score:</strong> ${correctAnswers} / ${TOTAL_QUESTIONS} (${percentage}%)</p>
+        <p><strong>Time Used:</strong> ${formatTime(timeUsed)}</p>
+        ${isAutoSubmit ? '<p><strong>Status:</strong> Auto-submitted (Time expired)</p>' : ''}
+        <p><strong>Grade:</strong> ${percentage >= 70 ? '🎉 Excellent!' : percentage >= 50 ? '👍 Good!' : '📚 Keep studying!'}</p>
+      `;
+      
+      summaryContainer.innerHTML = `
+        <h3>📋 Detailed Review</h3>
+        ${reviewHTML.join('')}
+      `;
+      
+      // Save to Firebase
+      try {
+        const newRef = push(ref(db, "quizResults"));
+        
+        await set(newRef, {
+          name: studentName,
+          class: studentClass,
+          sectionA: correctAnswers,
+          sectionB: 0,
+          total: correctAnswers,
+          percentage: percentage,
+          timeUsed: timeUsed,
+          autoSubmitted: isAutoSubmit,
+          date: new Date().toLocaleString(),
+          timestamp: new Date().toISOString(),
+          subject: "BECE Computing Mock Test - All 80 Questions"
+        });
+        
+        // Show success message
+        const successDiv = document.createElement('div');
+        successDiv.style.cssText = `
+          background: rgba(40, 167, 69, 0.9);
+          color: white;
+          padding: 15px;
+          border-radius: 10px;
+          margin-top: 20px;
+          text-align: center;
+          font-weight: 600;
+        `;
+        successDiv.innerHTML = `✅ Score saved successfully!<br>⏰ You can retake this quiz after ${COOLDOWN_HOURS} hours.`;
+        resultsArea.appendChild(successDiv);
+        
+      } catch (error) {
+        console.error("Error saving results:", error);
+        
+        // Show error message
+        const errorDiv = document.createElement('div');
+        errorDiv.style.cssText = `
+          background: rgba(220, 53, 69, 0.9);
+          color: white;
+          padding: 15px;
+          border-radius: 10px;
+          margin-top: 20px;
+          text-align: center;
+          font-weight: 600;
+        `;
+        errorDiv.innerHTML = '⚠️ Quiz completed but could not save to database. Please contact your Sir Sagoe.';
+        resultsArea.appendChild(errorDiv);
+      }
+    }
+  </script>
+</body>
+</html>
