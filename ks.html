@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cambridge Checkpoint 1 - Mathematics Assessment</title>
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-light: #eef2ff;
+      --primary-dark: #312e81;
+      --success: #10b981;
+      --success-light: #d1fae5;
+      --danger: #ef4444;
+      --danger-light: #fee2e2;
+      --warning: #f59e0b;
+      --warning-light: #fef3c7;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --radius: 16px;
+      --shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.1), 0 8px 10px -6px rgba(79, 70, 229, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 50%, #c7d2fe 100%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 16px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, var(--primary), #6366f1);
+      color: white;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
+    }
+
+    .brand-text h1 {
+      font-size: 17px;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.2;
+    }
+
+    .brand-text p {
+      font-size: 12px;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .btn-sound {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.2s;
+    }
+    .btn-sound:hover {
+      background: var(--primary-light);
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 12px 22px;
+      border: none;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+    button:active {
+      transform: translateY(1px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+      color: white;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+    }
+    .btn-primary:hover {
+      box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4);
+    }
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .btn-secondary {
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+    }
+    .btn-secondary:hover {
+      background: #e2e8f0;
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    /* Open Answer Text Input */
+    .answer-input-wrap {
+      margin: 24px 0 16px;
+    }
+    .answer-input-field {
+      width: 100%;
+      padding: 16px 20px;
+      border: 2px solid #cbd5e1;
+      border-radius: 14px;
+      font-size: 18px;
+      font-weight: 600;
+      background: #f8fafc;
+      color: #0f172a;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .answer-input-field:focus {
+      border-color: var(--primary);
+      background: white;
+      box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Countdown screen */
+    #countdownScreen {
+      text-align: center;
+      padding: 60px 0;
+    }
+    .countdown-circle {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      background: white;
+      border: 4px solid var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      font-weight: 900;
+      color: var(--primary);
+      box-shadow: 0 8px 24px rgba(79, 70, 229, 0.25);
+      animation: pulse 1s infinite alternate;
+    }
+    @keyframes pulse {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      100% { transform: scale(1.05); opacity: 1; }
+    }
+
+    /* Quiz Stats Bar */
+    .quiz-stats {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .badge-indigo {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+    }
+    .timer {
+      font-family: monospace;
+      font-size: 15px;
+      background: #f1f5f9;
+      color: #0f172a;
+      border: 1px solid #cbd5e1;
+    }
+    .timer.warning {
+      background: var(--danger-light);
+      color: var(--danger);
+      border-color: #fca5a5;
+      animation: blink 1s infinite;
+    }
+    @keyframes blink {
+      50% { opacity: 0.6; }
+    }
+
+    .progress-bar-wrap {
+      width: 100%;
+      height: 6px;
+      background: #e2e8f0;
+      border-radius: 99px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), #818cf8);
+      transition: width 0.3s ease;
+    }
+
+    .question-title {
+      font-size: 20px;
+      font-weight: 800;
+      line-height: 1.45;
+      margin-bottom: 16px;
+      color: #0f172a;
+    }
+
+    .grid-nav {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 6px;
+      margin-bottom: 20px;
+      padding: 12px;
+      background: #f8fafc;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+    }
+    @media (max-width: 600px) {
+      .grid-nav {
+        grid-template-columns: repeat(6, 1fr);
+      }
+    }
+    .nav-cell {
+      padding: 8px 0;
+      font-size: 12px;
+      font-weight: bold;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      background: white;
+      color: #475569;
+      cursor: pointer;
+      position: relative;
+    }
+    .nav-cell.current {
+      outline: 2px solid var(--primary);
+      outline-offset: 1px;
+    }
+    .nav-cell.answered {
+      background: var(--success-light);
+      color: #065f46;
+      border-color: #6ee7b7;
+    }
+    .nav-cell.flagged::after {
+      content: "";
+      position: absolute;
+      top: 3px;
+      right: 3px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--warning);
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(2px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 100;
+    }
+    .modal-content {
+      background: white;
+      border-radius: 20px;
+      padding: 28px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+
+    /* Results */
+    .score-hero {
+      text-align: center;
+      padding: 20px 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .score-number {
+      font-size: 52px;
+      font-weight: 900;
+      color: var(--primary);
+      line-height: 1;
+      margin: 12px 0 6px;
+    }
+    .score-percentage {
+      font-size: 20px;
+      font-weight: 700;
+      color: #334155;
+    }
+    .grade-badge {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 6px 16px;
+      border-radius: 99px;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 20px 0;
+    }
+    .stat-box {
+      padding: 14px;
+      border-radius: 12px;
+      text-align: center;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+    }
+    .stat-val {
+      font-size: 22px;
+      font-weight: 800;
+      margin-top: 4px;
+    }
+
+    .review-filters {
+      display: flex;
+      gap: 8px;
+      margin: 20px 0 16px;
+    }
+    .filter-btn {
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid transparent;
+      cursor: pointer;
+    }
+    .filter-btn.active {
+      background: white;
+      border-color: #cbd5e1;
+      color: #0f172a;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      font-weight: bold;
+    }
+
+    .review-item {
+      padding: 18px;
+      border-radius: 14px;
+      margin-bottom: 14px;
+      border: 1px solid #e2e8f0;
+    }
+    .review-item.is-correct {
+      background: rgba(16, 185, 129, 0.05);
+      border-color: #a7f3d0;
+    }
+    .review-item.is-wrong {
+      background: rgba(239, 68, 68, 0.05);
+      border-color: #fecaca;
+    }
+    .solution-box {
+      margin-top: 12px;
+      padding: 10px 14px;
+      background: white;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      font-size: 13px;
+      color: #475569;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 32px;
+      font-size: 13px;
+      color: #64748b;
+    }
+
+    @media print {
+      body { background: white; padding: 0; }
+      .btn-sound, .btn-primary, .btn-secondary, .review-filters, footer, .top-nav-links { display: none !important; }
+      .card { box-shadow: none; border: none; padding: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="card">
+      <!-- Header -->
+      <div class="header-bar">
+        <div class="brand">
+          <div class="brand-icon">📐</div>
+          <div class="brand-text">
+            <h1>Cambridge Checkpoint 1</h1>
+            <p>Mathematics Assessment • Open Input Questions</p>
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px; align-items: center;" class="top-nav-links">
+          <button id="soundToggle" class="btn-sound" title="Toggle Sound">🔊</button>
+        </div>
+      </div>
+
+      <!-- PAGE 1: NAME ENTRY -->
+      <div id="namePage">
+        <h2 style="font-size: 24px; font-weight: 800; text-align: center; margin-bottom: 8px;">
+          Cambridge Checkpoint 1 Assessment
+        </h2>
+        <p style="text-align: center; color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">
+          Please enter your full name to start the Mathematics Checkpoint 1 test:
+        </p>
+        <div style="max-width: 440px; margin: 0 auto;">
+          <input type="text" id="studentNameInput" placeholder="Enter full name (e.g. Kofi Mensah)" class="answer-input-field" style="margin-bottom: 16px;" autofocus />
+          <div id="lockMessage" class="hidden" style="margin-bottom: 16px; padding: 12px; background: var(--danger-light); color: var(--danger); border-radius: 10px; font-size: 13px; font-weight: 600;"></div>
+          <button id="proceedBtn" class="btn-primary" style="width: 100%;">
+            Proceed to Instructions ➜
+          </button>
+        </div>
+      </div>
+
+      <!-- PAGE 2: WELCOME & RULES -->
+      <div id="welcomePage" class="hidden">
+        <h2 id="welcomeGreeting" style="font-size: 22px; font-weight: 800; text-align: center; margin-bottom: 8px;"></h2>
+        <p style="text-align: center; color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">
+          Topics: <strong>Place Value, Number Operations, Decimals & Rounding</strong>
+        </p>
+
+        <div style="background: var(--primary-light); padding: 18px; border-radius: 12px; border: 1px solid #c7d2fe; font-size: 14px; line-height: 1.6; margin-bottom: 24px;">
+          <ul style="padding-left: 20px;">
+            <li><strong>Total Questions:</strong> 30 questions</li>
+            <li><strong>Format:</strong> <em>Open answer input</em> — type your numeric or word answer into the box.</li>
+            <li><strong>No Choices Provided:</strong> Work out the answer and type it accurately.</li>
+            <li><strong>Time Allowed:</strong> 45 minutes</li>
+            <li><strong>Review:</strong> You can skip and flag questions to review before submitting.</li>
+          </ul>
+        </div>
+
+        <div style="display: flex; gap: 12px; justify-content: center;">
+          <button id="backToNameBtn" class="btn-secondary">Change Name</button>
+          <button id="startBtn" class="btn-primary">Start Checkpoint Now ➜</button>
+        </div>
+      </div>
+
+      <!-- PAGE 3: COUNTDOWN -->
+      <div id="countdownScreen" class="hidden">
+        <div class="countdown-circle" id="countdownCircle">3</div>
+        <p style="font-size: 16px; font-weight: 700; color: #475569;">Get ready to begin Checkpoint 1...</p>
+      </div>
+
+      <!-- PAGE 4: QUIZ AREA -->
+      <div id="quizArea" class="hidden">
+        <div class="quiz-stats">
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <span class="badge badge-indigo" id="qNumberBadge">Q 1 of 30</span>
+            <button id="toggleGridBtn" class="btn-secondary" style="padding: 6px 12px; font-size: 12px;">Navigator</button>
+          </div>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <button id="flagBtn" class="btn-secondary" style="padding: 6px 12px; font-size: 12px;">🚩 Flag</button>
+            <div id="timerDisplay" class="badge timer">30:00</div>
+          </div>
+        </div>
+
+        <div id="navGrid" class="grid-nav hidden"></div>
+
+        <div class="progress-bar-wrap">
+          <div id="progressFill" class="progress-fill" style="width: 3%;"></div>
+        </div>
+
+        <h3 id="questionText" class="question-title"></h3>
+
+        <!-- Open Input Field -->
+        <div class="answer-input-wrap">
+          <label style="display: block; font-size: 13px; font-weight: bold; color: #64748b; margin-bottom: 8px; text-transform: uppercase;">
+            Your Answer:
+          </label>
+          <input 
+            type="text" 
+            id="userAnswerInput" 
+            class="answer-input-field" 
+            placeholder="Type your answer here..." 
+            autocomplete="off"
+          />
+          <p style="font-size: 12px; color: #64748b; margin-top: 6px;">
+            Tip: Press <kbd style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-weight: bold;">Enter</kbd> to move to next question
+          </p>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 28px; padding-top: 18px; border-top: 1px solid #f1f5f9;">
+          <button id="prevBtn" class="btn-secondary">⬅ Previous</button>
+          <div style="display: flex; gap: 10px;">
+            <button id="nextBtn" class="btn-primary">Next ➜</button>
+            <button id="submitTriggerBtn" class="btn-success">Submit Checkpoint ✓</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAGE 5: RESULTS -->
+      <div id="resultsPage" class="hidden">
+        <div class="score-hero">
+          <h2 style="font-size: 24px; font-weight: 800; color: #0f172a;">Checkpoint 1 Completed!</h2>
+          <p id="resultStudentName" style="color: #64748b; font-size: 15px; margin-top: 4px;"></p>
+          <div class="score-number" id="scoreDisplay">0 / 30</div>
+          <div class="score-percentage" id="percentageDisplay">0%</div>
+          <div id="gradeBadge" class="grade-badge"></div>
+        </div>
+
+        <div class="summary-grid">
+          <div class="stat-box">
+            <div style="font-size: 12px; font-weight: bold; color: var(--success);">CORRECT</div>
+            <div class="stat-val" id="correctCount" style="color: var(--success);">0</div>
+          </div>
+          <div class="stat-box">
+            <div style="font-size: 12px; font-weight: bold; color: var(--danger);">INCORRECT</div>
+            <div class="stat-val" id="wrongCount" style="color: var(--danger);">0</div>
+          </div>
+          <div class="stat-box">
+            <div style="font-size: 12px; font-weight: bold; color: #4f46e5;">TIME TAKEN</div>
+            <div class="stat-val" id="timeTakenDisplay" style="color: #312e81; font-size: 18px; margin-top: 6px;">0:00</div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; justify-content: center; margin: 16px 0; flex-wrap: wrap;">
+          <button onclick="window.print()" class="btn-secondary">🖨 Print Results Slip</button>
+          <button id="retakeBtn" class="btn-primary">New Student / Retake</button>
+        </div>
+
+        <div class="review-filters">
+          <button class="filter-btn active" data-filter="all">All (30)</button>
+          <button class="filter-btn" data-filter="correct">Correct</button>
+          <button class="filter-btn" data-filter="wrong">Incorrect</button>
+        </div>
+
+        <div id="reviewContainer"></div>
+      </div>
+
+    </div>
+
+    <footer>
+      <p>Cambridge Primary & Lower Secondary Checkpoint 1 • Mathematics Series © 2025</p>
+    </footer>
+  </div>
+
+  <!-- CONFIRM SUBMIT MODAL -->
+  <div id="submitModal" class="modal-backdrop hidden">
+    <div class="modal-content">
+      <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 8px;">Submit your checkpoint test?</h3>
+      <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 16px;">
+        Double-check your typed answers before submitting.
+      </p>
+      <div style="background: #f8fafc; padding: 14px; border-radius: 12px; font-size: 14px; text-align: left; margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+          <span>Answered:</span> <strong id="modalAnswered" style="color: var(--success);">0 / 30</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+          <span>Unanswered:</span> <strong id="modalUnanswered" style="color: var(--danger);">30</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span>Flagged for review:</span> <strong id="modalFlagged" style="color: var(--warning);">0</strong>
+        </div>
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <button id="modalCancelBtn" class="btn-secondary" style="flex: 1;">Keep Reviewing</button>
+        <button id="modalConfirmBtn" class="btn-success" style="flex: 1;">Yes, Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ========================================================
+       🔹 CAMBRIDGE CHECKPOINT 1 QUIZ DATA (Open-Input)
+       ======================================================== */
+    const quizData = [
+      {
+        id: 1,
+        question: "Write five thousand, two hundred and seventy-one in digits.",
+        answer: "5271",
+        acceptedAnswers: ["5271", "5,271"],
+        explanation: "Five thousand, two hundred and seventy-one is written as 5,271."
+      },
+      {
+        id: 2,
+        question: "Write one hundred and nine thousand and ninety in digits.",
+        answer: "109090",
+        acceptedAnswers: ["109090", "109,090"],
+        explanation: "One hundred and nine thousand and ninety is 109,090."
+      },
+      {
+        id: 3,
+        question: "What is the value of the digit 6 in 6703?",
+        answer: "6000",
+        acceptedAnswers: ["6000", "6,000"],
+        explanation: "The 6 is in the thousands place, so its value is 6,000."
+      },
+      {
+        id: 4,
+        question: "What is the value of the digit 6 in 9060?",
+        answer: "60",
+        acceptedAnswers: ["60"],
+        explanation: "The 6 is in the tens place, so its value is 60."
+      },
+      {
+        id: 5,
+        question: "What is the value of the digit 6 in 765430?",
+        answer: "60000",
+        acceptedAnswers: ["60000", "60,000"],
+        explanation: "The 6 is in the ten-thousands place, so its value is 60,000."
+      },
+      {
+        id: 6,
+        question: "Which number is 100 times larger than 333?",
+        answer: "33300",
+        acceptedAnswers: ["33300", "33,300"],
+        explanation: "333 × 100 = 33,300."
+      },
+      {
+        id: 7,
+        question: "What number divided by 10 gives 64?",
+        answer: "640",
+        acceptedAnswers: ["640"],
+        explanation: "640 ÷ 10 = 64."
+      },
+      {
+        id: 8,
+        question: "What number multiplied by 10 gives 5090?",
+        answer: "509",
+        acceptedAnswers: ["509"],
+        explanation: "509 × 10 = 5,090."
+      },
+      {
+        id: 9,
+        question: "What number multiplied by 100 gives 8000?",
+        answer: "80",
+        acceptedAnswers: ["80"],
+        explanation: "80 × 100 = 8,000."
+      },
+      {
+        id: 10,
+        question: "What number divided into 4400 gives 44?",
+        answer: "100",
+        acceptedAnswers: ["100"],
+        explanation: "4,400 ÷ 100 = 44."
+      },
+      {
+        id: 11,
+        question: "Write 1,001.01 in words.",
+        answer: "one thousand and one point zero one",
+        acceptedAnswers: [
+          "one thousand and one point zero one",
+          "one thousand one point zero one"
+        ],
+        explanation: "1,001.01 is read as one thousand and one point zero one."
+      },
+      {
+        id: 12,
+        question: "Write 500,005.9 in words.",
+        answer: "five hundred thousand and five point nine",
+        acceptedAnswers: ["five hundred thousand and five point nine"],
+        explanation: "500,005.9 is five hundred thousand and five point nine."
+      },
+      {
+        id: 13,
+        question: "Write 403,034.66 in words.",
+        answer: "four hundred and three thousand and thirty-four point six six",
+        acceptedAnswers: [
+          "four hundred and three thousand and thirty-four point six six",
+          "four hundred three thousand thirty-four point six six"
+        ],
+        explanation: "403,034.66 is read as four hundred and three thousand and thirty-four point six six."
+      },
+      {
+        id: 14,
+        question: "What is the value of the digit 7 in 6703.46?",
+        answer: "700",
+        acceptedAnswers: ["700"],
+        explanation: "The 7 is in the hundreds place, so its value is 700."
+      },
+      {
+        id: 15,
+        question: "What is the value of the digit 7 in 70,213.8?",
+        answer: "70000",
+        acceptedAnswers: ["70000", "70,000"],
+        explanation: "The 7 is in the ten-thousands place, so its value is 70,000."
+      },
+      {
+        id: 16,
+        question: "What is the value of the digit 7 in 234,560.07?",
+        answer: "0.07",
+        acceptedAnswers: ["0.07"],
+        explanation: "The 7 is in the hundredths place, so its value is 0.07."
+      },
+      {
+        id: 17,
+        question: "Calculate 358 × 100.",
+        answer: "35800",
+        acceptedAnswers: ["35800", "35,800"],
+        explanation: "358 × 100 = 35,800."
+      },
+      {
+        id: 18,
+        question: "Calculate 2700 ÷ 100.",
+        answer: "27",
+        acceptedAnswers: ["27"],
+        explanation: "2,700 ÷ 100 = 27."
+      },
+      {
+        id: 19,
+        question: "Calculate 5600 ÷ 1000.",
+        answer: "5.6",
+        acceptedAnswers: ["5.6"],
+        explanation: "5,600 ÷ 1,000 = 5.6."
+      },
+      {
+        id: 20,
+        question: "Calculate 456 × 1000.",
+        answer: "456000",
+        acceptedAnswers: ["456000", "456,000"],
+        explanation: "456 × 1,000 = 456,000."
+      },
+      {
+        id: 21,
+        question: "Sofia multiplies a number by 10, then by 10 again, and then by 10 again. Her answer is 20,000. What number did she start with?",
+        answer: "20",
+        acceptedAnswers: ["20"],
+        explanation: "Multiplying by 10 three times is multiplying by 1,000. 20,000 ÷ 1,000 = 20."
+      },
+      {
+        id: 22,
+        question: "Calculate 3.45 × 100.",
+        answer: "345",
+        acceptedAnswers: ["345"],
+        explanation: "3.45 × 100 = 345."
+      },
+      {
+        id: 23,
+        question: "Calculate 16.8 ÷ 10.",
+        answer: "1.68",
+        acceptedAnswers: ["1.68"],
+        explanation: "16.8 ÷ 10 = 1.68."
+      },
+      {
+        id: 24,
+        question: "Calculate 6.5 × 10.",
+        answer: "65",
+        acceptedAnswers: ["65"],
+        explanation: "6.5 × 10 = 65."
+      },
+      {
+        id: 25,
+        question: "Round 3.9 metres to the nearest whole metre.",
+        answer: "4",
+        acceptedAnswers: ["4", "4 m", "4m", "4 metres"],
+        explanation: "The tenths digit is 9, so 3.9 rounds up to 4 metres."
+      },
+      {
+        id: 26,
+        question: "Round 4.5 metres to the nearest whole metre.",
+        answer: "5",
+        acceptedAnswers: ["5", "5 m", "5m", "5 metres"],
+        explanation: "The tenths digit is 5, so 4.5 rounds up to 5 metres."
+      },
+      {
+        id: 27,
+        question: "Round 0.4 metres to the nearest whole metre.",
+        answer: "0",
+        acceptedAnswers: ["0", "0 m", "0m", "0 metres"],
+        explanation: "The tenths digit is 4, so 0.4 rounds down to 0 metres."
+      },
+      {
+        id: 28,
+        question: "Round 65.8 to the nearest whole number.",
+        answer: "66",
+        acceptedAnswers: ["66"],
+        explanation: "The tenths digit is 8, so 65.8 rounds up to 66."
+      },
+      {
+        id: 29,
+        question: "Round 44.4 to the nearest whole number.",
+        answer: "44",
+        acceptedAnswers: ["44"],
+        explanation: "The tenths digit is 4, so 44.4 rounds down to 44."
+      },
+      {
+        id: 30,
+        question: "Round 55.5 to the nearest whole number.",
+        answer: "56",
+        acceptedAnswers: ["56"],
+        explanation: "The tenths digit is 5, so 55.5 rounds up to 56."
+      }
+    ];
+
+    // Answer Validation Function
+    function checkAnswerCorrect(userRaw, q) {
+      if (!userRaw || typeof userRaw !== "string") return false;
+      const cleanUser = userRaw.trim().toLowerCase().replace(/\s+/g, ' ');
+      const cleanCanonical = q.answer.trim().toLowerCase().replace(/\s+/g, ' ');
+
+      if (cleanUser === cleanCanonical) return true;
+
+      // Check numeric equivalence (e.g. 5271 vs 5,271)
+      const userStripped = cleanUser.replace(/,/g, '');
+      const canonStripped = cleanCanonical.replace(/,/g, '');
+      if (userStripped === canonStripped) return true;
+
+      // Check against accepted answers
+      if (Array.isArray(q.acceptedAnswers)) {
+        for (const acc of q.acceptedAnswers) {
+          const accClean = acc.trim().toLowerCase().replace(/\s+/g, ' ');
+          if (cleanUser === accClean) return true;
+          if (userStripped === accClean.replace(/,/g, '')) return true;
+        }
+      }
+
+      return false;
+    }
+
+    /* Sound Synthesizer */
+    let audioEnabled = true;
+    let audioCtx = null;
+    function playTone(freq, type = 'sine', duration = 0.1) {
+      if (!audioEnabled) return;
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    const soundToggle = document.getElementById("soundToggle");
+    soundToggle.addEventListener("click", () => {
+      audioEnabled = !audioEnabled;
+      soundToggle.textContent = audioEnabled ? "🔊" : "🔇";
+    });
+
+    /* App State */
+    let studentName = "";
+    let currentIndex = 0;
+    let userAnswers = new Array(quizData.length).fill("");
+    let flagged = new Array(quizData.length).fill(false);
+    let timeLeft = 45 * 60; // 45 minutes
+    let timerInterval = null;
+    let startTime = 0;
+    let timeTaken = 0;
+
+    // Elements
+    const namePage = document.getElementById("namePage");
+    const welcomePage = document.getElementById("welcomePage");
+    const countdownScreen = document.getElementById("countdownScreen");
+    const quizArea = document.getElementById("quizArea");
+    const resultsPage = document.getElementById("resultsPage");
+
+    const studentNameInput = document.getElementById("studentNameInput");
+    const proceedBtn = document.getElementById("proceedBtn");
+    const lockMessage = document.getElementById("lockMessage");
+
+    const welcomeGreeting = document.getElementById("welcomeGreeting");
+    const startBtn = document.getElementById("startBtn");
+    const backToNameBtn = document.getElementById("backToNameBtn");
+
+    const qNumberBadge = document.getElementById("qNumberBadge");
+    const timerDisplay = document.getElementById("timerDisplay");
+    const progressFill = document.getElementById("progressFill");
+    const questionText = document.getElementById("questionText");
+    const userAnswerInput = document.getElementById("userAnswerInput");
+    const navGrid = document.getElementById("navGrid");
+    const toggleGridBtn = document.getElementById("toggleGridBtn");
+    const flagBtn = document.getElementById("flagBtn");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const submitTriggerBtn = document.getElementById("submitTriggerBtn");
+
+    // Modal elements
+    const submitModal = document.getElementById("submitModal");
+    const modalAnswered = document.getElementById("modalAnswered");
+    const modalUnanswered = document.getElementById("modalUnanswered");
+    const modalFlagged = document.getElementById("modalFlagged");
+    const modalCancelBtn = document.getElementById("modalCancelBtn");
+    const modalConfirmBtn = document.getElementById("modalConfirmBtn");
+
+    /* Step 1: Name */
+    proceedBtn.addEventListener("click", () => {
+      const name = studentNameInput.value.trim();
+      if (!name) {
+        studentNameInput.focus();
+        return;
+      }
+      studentName = name;
+      namePage.classList.add("hidden");
+      welcomeGreeting.textContent = `Welcome, ${studentName}!`;
+      welcomePage.classList.remove("hidden");
+      playTone(550, 'sine', 0.1);
+    });
+
+    studentNameInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") proceedBtn.click();
+    });
+
+    backToNameBtn.addEventListener("click", () => {
+      welcomePage.classList.add("hidden");
+      namePage.classList.remove("hidden");
+    });
+
+    /* Step 2: Countdown */
+    startBtn.addEventListener("click", () => {
+      welcomePage.classList.add("hidden");
+      countdownScreen.classList.remove("hidden");
+      let count = 3;
+      const countEl = document.getElementById("countdownCircle");
+      countEl.textContent = count;
+      playTone(440, 'sine', 0.1);
+
+      const cd = setInterval(() => {
+        count--;
+        if (count > 0) {
+          countEl.textContent = count;
+          playTone(440, 'sine', 0.1);
+        } else {
+          clearInterval(cd);
+          countEl.textContent = "Go!";
+          playTone(880, 'triangle', 0.3);
+          setTimeout(() => {
+            countdownScreen.classList.add("hidden");
+            startQuiz();
+          }, 600);
+        }
+      }, 1000);
+    });
+
+    /* Step 3: Quiz Logic */
+    function startQuiz() {
+      quizArea.classList.remove("hidden");
+      currentIndex = 0;
+      timeLeft = 45 * 60;
+      startTime = Date.now();
+      buildNavGrid();
+      renderQuestion();
+      startTimer();
+    }
+
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        const mins = Math.floor(timeLeft / 60);
+        const secs = timeLeft % 60;
+        timerDisplay.textContent = `${mins}:${secs.toString().padStart(2, "0")}`;
+
+        if (timeLeft <= 180) {
+          timerDisplay.classList.add("warning");
+        }
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          finishQuiz();
+        }
+      }, 1000);
+    }
+
+    function saveCurrentInput() {
+      userAnswers[currentIndex] = userAnswerInput.value.trim();
+    }
+
+    function renderQuestion() {
+      const q = quizData[currentIndex];
+      qNumberBadge.textContent = `Q ${currentIndex + 1} of ${quizData.length}`;
+      questionText.textContent = `${currentIndex + 1}. ${q.question}`;
+
+      const pct = ((currentIndex + 1) / quizData.length) * 100;
+      progressFill.style.width = pct + "%";
+
+      // Put saved value in input
+      userAnswerInput.value = userAnswers[currentIndex] || "";
+      userAnswerInput.focus();
+
+      // Flag styling
+      if (flagged[currentIndex]) {
+        flagBtn.style.background = "var(--warning-light)";
+        flagBtn.style.borderColor = "var(--warning)";
+        flagBtn.textContent = "🚩 Flagged";
+      } else {
+        flagBtn.style.background = "#f1f5f9";
+        flagBtn.style.borderColor = "#cbd5e1";
+        flagBtn.textContent = "🚩 Flag";
+      }
+
+      prevBtn.disabled = currentIndex === 0;
+      if (currentIndex === quizData.length - 1) {
+        nextBtn.classList.add("hidden");
+      } else {
+        nextBtn.classList.remove("hidden");
+      }
+      updateNavGrid();
+    }
+
+    userAnswerInput.addEventListener("input", () => {
+      saveCurrentInput();
+      updateNavGrid();
+    });
+
+    userAnswerInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        saveCurrentInput();
+        if (currentIndex < quizData.length - 1) {
+          nextBtn.click();
+        } else {
+          submitTriggerBtn.click();
+        }
+      }
+    });
+
+    prevBtn.addEventListener("click", () => {
+      saveCurrentInput();
+      if (currentIndex > 0) {
+        currentIndex--;
+        playTone(480, 'sine', 0.04);
+        renderQuestion();
+      }
+    });
+
+    nextBtn.addEventListener("click", () => {
+      saveCurrentInput();
+      if (currentIndex < quizData.length - 1) {
+        currentIndex++;
+        playTone(520, 'sine', 0.04);
+        renderQuestion();
+      }
+    });
+
+    flagBtn.addEventListener("click", () => {
+      flagged[currentIndex] = !flagged[currentIndex];
+      renderQuestion();
+    });
+
+    function buildNavGrid() {
+      navGrid.innerHTML = "";
+      quizData.forEach((_, i) => {
+        const cell = document.createElement("button");
+        cell.className = "nav-cell";
+        cell.textContent = i + 1;
+        cell.onclick = () => {
+          saveCurrentInput();
+          currentIndex = i;
+          renderQuestion();
+        };
+        navGrid.appendChild(cell);
+      });
+      updateNavGrid();
+    }
+
+    function updateNavGrid() {
+      const cells = navGrid.children;
+      for (let i = 0; i < cells.length; i++) {
+        cells[i].className = "nav-cell";
+        if (i === currentIndex) cells[i].classList.add("current");
+        if (userAnswers[i] && userAnswers[i].trim() !== "") cells[i].classList.add("answered");
+        if (flagged[i]) cells[i].classList.add("flagged");
+      }
+    }
+
+    toggleGridBtn.addEventListener("click", () => {
+      navGrid.classList.toggle("hidden");
+      toggleGridBtn.textContent = navGrid.classList.contains("hidden") ? "Navigator" : "Hide Nav";
+    });
+
+    /* Step 4: Submit Confirmation */
+    submitTriggerBtn.addEventListener("click", () => {
+      saveCurrentInput();
+      const answered = userAnswers.filter(a => a && a.trim() !== "").length;
+      modalAnswered.textContent = `${answered} / ${quizData.length}`;
+      modalUnanswered.textContent = `${quizData.length - answered}`;
+      modalFlagged.textContent = `${flagged.filter(Boolean).length}`;
+      submitModal.classList.remove("hidden");
+    });
+
+    modalCancelBtn.addEventListener("click", () => {
+      submitModal.classList.add("hidden");
+    });
+
+    modalConfirmBtn.addEventListener("click", () => {
+      submitModal.classList.add("hidden");
+      finishQuiz();
+    });
+
+    /* Step 5: Scoring and Results */
+    function finishQuiz() {
+      saveCurrentInput();
+      if (timerInterval) clearInterval(timerInterval);
+      quizArea.classList.add("hidden");
+      resultsPage.classList.remove("hidden");
+
+      timeTaken = Math.max(1, Math.round((Date.now() - startTime) / 1000));
+      const m = Math.floor(timeTaken / 60);
+      const s = timeTaken % 60;
+      document.getElementById("timeTakenDisplay").textContent = `${m}m ${s}s`;
+
+      let score = 0;
+      quizData.forEach((q, idx) => {
+        if (checkAnswerCorrect(userAnswers[idx], q)) {
+          score++;
+        }
+      });
+
+      const pct = ((score / quizData.length) * 100).toFixed(1);
+
+      document.getElementById("resultStudentName").textContent = `Student: ${studentName}`;
+      document.getElementById("scoreDisplay").textContent = `${score} / ${quizData.length}`;
+      document.getElementById("percentageDisplay").textContent = `${pct}%`;
+      document.getElementById("correctCount").textContent = score;
+      document.getElementById("wrongCount").textContent = quizData.length - score;
+
+      const gb = document.getElementById("gradeBadge");
+      if (pct >= 90) {
+        gb.textContent = "Distinction - Outstanding!";
+        gb.style.background = "var(--success-light)";
+        gb.style.color = "#065f46";
+      } else if (pct >= 75) {
+        gb.textContent = "Excellent (Grade 1)";
+        gb.style.background = "#dbeafe";
+        gb.style.color = "#1e40af";
+      } else if (pct >= 60) {
+        gb.textContent = "Good / Credit (Grade 2)";
+        gb.style.background = "var(--primary-light)";
+        gb.style.color = "var(--primary-dark)";
+      } else if (pct >= 50) {
+        gb.textContent = "Pass (Grade 3)";
+        gb.style.background = "var(--warning-light)";
+        gb.style.color = "#92400e";
+      } else {
+        gb.textContent = "Needs Revision";
+        gb.style.background = "var(--danger-light)";
+        gb.style.color = "#991b1b";
+      }
+
+      // Save to Firebase & LocalStorage
+      const record = {
+        id: `${studentName}_checkpoint1_${Date.now()}`,
+        name: studentName,
+        total: score,
+        score: score,
+        maxScore: quizData.length,
+        totalQuestions: quizData.length,
+        percentage: Number(pct),
+        date: new Date().toISOString(),
+        timestamp: new Date().toISOString(),
+        subject: "Cambridge Checkpoint 1 - Mathematics",
+        timeUsed: timeTaken,
+        autoSubmitted: timeLeft <= 0,
+        answers: userAnswers
+      };
+
+      try {
+        const localList = JSON.parse(localStorage.getItem('quizResults') || '[]');
+        localList.unshift(record);
+        localStorage.setItem('quizResults', JSON.stringify(localList));
+      } catch (e) {}
+
+      try {
+        const sanitized = studentName.replace(/[.#$\[\]]/g, "_");
+        fetch(`https://tracha-xx-default-rtdb.firebaseio.com/quizResults/${sanitized}_cp1_${Date.now()}.json`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(record)
+        }).catch(() => {});
+      } catch (e) {}
+
+      // Play chime
+      [523, 659, 783, 1046].forEach((f, i) => setTimeout(() => playTone(f, 'triangle', 0.2), i * 90));
+
+      renderReview('all');
+    }
+
+    function renderReview(filter) {
+      const container = document.getElementById("reviewContainer");
+      container.innerHTML = "";
+
+      quizData.forEach((q, idx) => {
+        const userA = userAnswers[idx];
+        const isCorrect = checkAnswerCorrect(userA, q);
+        const isEmpty = !userA || userA.trim() === "";
+
+        if (filter === 'correct' && !isCorrect) return;
+        if (filter === 'wrong' && isCorrect) return;
+
+        const div = document.createElement("div");
+        div.className = "review-item " + (isCorrect ? "is-correct" : "is-wrong");
+        div.style.borderLeft = isCorrect ? "4px solid #10b981" : "4px solid #f43f5e";
+        div.style.borderRadius = "14px";
+        div.style.padding = "16px";
+        div.style.marginBottom = "14px";
+        div.style.background = "#ffffff";
+        div.style.boxShadow = "0 1px 3px rgba(0,0,0,0.05)";
+
+        div.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; padding-bottom:8px; border-bottom:1px solid #f1f5f9;">
+            <span style="font-size:11px; font-weight:700; color:#64748b; letter-spacing:0.5px; text-transform:uppercase;">QUESTION ${idx + 1} OF 30 · MATHEMATICS</span>
+            <span style="font-size:11px; font-weight:700; padding:3px 10px; border-radius:999px; background:${isCorrect ? '#ecfdf5' : '#fff1f2'}; color:${isCorrect ? '#047857' : '#be123c'}; border:1px solid ${isCorrect ? '#a7f3d0' : '#fecdd3'};">
+              ${isCorrect ? '✓ Correct · +1 Mark' : (isEmpty ? '⚠ Unanswered · 0 Marks' : '✕ Incorrect · 0 Marks')}
+            </span>
+          </div>
+          <p style="font-weight:700; font-size:15px; margin:6px 0 12px 0; color:#0f172a; line-height:1.45;">${q.question}</p>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:10px; margin-bottom:10px;">
+            <div style="padding:10px 14px; border-radius:12px; background:${isCorrect ? '#ecfdf5' : '#fff1f2'}; border:1px solid ${isCorrect ? '#a7f3d0' : '#fecdd3'};">
+              <span style="display:block; font-size:10px; font-weight:700; text-transform:uppercase; color:#64748b;">Candidate's Response:</span>
+              <strong style="font-size:15px; color:${isCorrect ? '#065f46' : '#9f1239'}; margin-top:3px; display:block; font-family:monospace;">
+                ${isEmpty ? '(No answer entered)' : userA}
+              </strong>
+            </div>
+            <div style="padding:10px 14px; border-radius:12px; background:#ecfdf5; border:1px solid #a7f3d0;">
+              <span style="display:block; font-size:10px; font-weight:700; text-transform:uppercase; color:#047857;">Accepted Mark Scheme:</span>
+              <strong style="font-size:15px; color:#065f46; margin-top:3px; display:block; font-family:monospace;">
+                ${q.answer}
+              </strong>
+            </div>
+          </div>
+          ${q.explanation ? `<div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:10px 14px; font-size:12px; color:#334155; line-height:1.5;"><strong>💡 Explanation:</strong> ${q.explanation}</div>` : ''}
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    document.querySelectorAll(".filter-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        renderReview(btn.getAttribute("data-filter"));
+      });
+    });
+
+    document.getElementById("retakeBtn").addEventListener("click", () => {
+      resultsPage.classList.add("hidden");
+      namePage.classList.remove("hidden");
+      studentNameInput.value = "";
+      userAnswers = new Array(quizData.length).fill("");
+      flagged = new Array(quizData.length).fill(false);
+      currentIndex = 0;
+    });
+  </script>
+</body>
+</html>
