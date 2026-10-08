@@ -1,374 +1,1230 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Compound Probability Quiz</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yeriel Bracha Computing Quiz - Hardware & Storage</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: orange;
+    :root {
+      --primary: #f97316;
+      --primary-hover: #ea580c;
+      --primary-light: #ffedd5;
+      --primary-dark: #9a3412;
+      --success: #10b981;
+      --success-light: #d1fae5;
+      --danger: #ef4444;
+      --danger-light: #fee2e2;
+      --warning: #f59e0b;
+      --warning-light: #fef3c7;
+      --bg: #fff7ed;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: #fed7aa;
+      --radius: 16px;
+      --shadow: 0 10px 25px -5px rgba(249, 115, 22, 0.1), 0 8px 10px -6px rgba(249, 115, 22, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 50%, #fed7aa 100%);
+      color: var(--text);
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 16px;
     }
-    .wrap {
-      width: 90%;
-      max-width: 800px;
-      background: #fff;
-      padding: 20px;
+
+    .container {
+      width: 100%;
+      max-width: 760px;
+      margin: 0 auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, var(--primary), #fb923c);
+      color: white;
       border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 4px 10px rgba(249, 115, 22, 0.3);
     }
-    h1, h2 { text-align: center; }
-    .hidden { display: none; }
-    .controls { margin-top: 20px; text-align: center; }
-    button {
-      padding: 15px 25px;
-      margin: 10px;
-      border: none;
+
+    .brand-text h1 {
+      font-size: 17px;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.2;
+    }
+
+    .brand-text p {
+      font-size: 12px;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .btn-sound {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
       border-radius: 10px;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
-      font-size: 18px;
+      font-size: 16px;
       transition: 0.2s;
     }
-    button:hover { transform: scale(1.05); }
-    button.primary { background: #4CAF50; color: white; }
-    button.secondary { background: #ddd; }
-    #timer { font-weight: bold; text-align: right; margin-bottom: 10px; }
-    .results { margin-top: 20px; padding: 15px; border-radius: 8px; background: #eef; }
-    .summary { margin-top: 20px; padding: 10px; border-top: 2px solid #ccc; }
-    .correct { color: green; font-weight: bold; }
-    .wrong { color: red; font-weight: bold; }
-    footer {
-      text-align: center;
-      margin-top: 40px;
-      padding: 15px;
-      background: #333;
+    .btn-sound:hover {
+      background: var(--primary-light);
+      border-color: var(--border);
+    }
+
+    /* Common Button Styles */
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 12px 22px;
+      border: none;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+    button:active {
+      transform: translateY(1px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-hover));
       color: white;
-      border-radius: 8px;
-      font-size: 14px;
+      box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
     }
-    input {
-      padding: 12px;
-      width: 90%;
-      margin: 15px auto;
-      display: block;
-      border-radius: 8px;
-      border: 1px solid #ccc;
+    .btn-primary:hover {
+      box-shadow: 0 6px 16px rgba(249, 115, 22, 0.4);
+    }
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .btn-secondary {
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+    }
+    .btn-secondary:hover {
+      background: #e2e8f0;
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+    .btn-success:hover {
+      box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+    }
+
+    /* Input Field */
+    input[type="text"] {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
       font-size: 16px;
+      background: #f8fafc;
+      color: var(--text);
+      outline: none;
+      transition: 0.2s;
     }
+    input[type="text"]:focus {
+      border-color: var(--primary);
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.15);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Countdown screen */
     #countdownScreen {
       text-align: center;
-      font-size: 60px;
-      font-weight: bold;
-      color: #4CAF50;
-      animation: fade 1s ease-in-out infinite;
+      padding: 60px 0;
     }
-    @keyframes fade {
-      0%, 100% { opacity: 0; }
-      50% { opacity: 1; }
+    .countdown-circle {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      background: white;
+      border: 4px solid var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      font-weight: 900;
+      color: var(--primary);
+      box-shadow: 0 8px 24px rgba(249, 115, 22, 0.25);
+      animation: pulse 1s infinite alternate;
+    }
+    @keyframes pulse {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      100% { transform: scale(1.05); opacity: 1; }
+    }
+
+    /* Quiz Stats Bar */
+    .quiz-stats {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .badge-orange {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+    }
+    .timer {
+      font-family: monospace;
+      font-size: 15px;
+      background: #f1f5f9;
+      color: #0f172a;
+      border: 1px solid #cbd5e1;
+    }
+    .timer.warning {
+      background: var(--danger-light);
+      color: var(--danger);
+      border-color: #fca5a5;
+      animation: blink 1s infinite;
+    }
+    @keyframes blink {
+      50% { opacity: 0.6; }
+    }
+
+    /* Progress bar */
+    .progress-bar-wrap {
+      width: 100%;
+      height: 6px;
+      background: #e2e8f0;
+      border-radius: 99px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), #fb923c);
+      transition: width 0.3s ease;
+    }
+
+    /* Options */
+    .question-title {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.45;
+      margin-bottom: 20px;
+      color: #0f172a;
+    }
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .option-btn {
+      width: 100%;
+      background: #fff;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px 18px;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 15px;
+      font-weight: 500;
+      color: #334155;
+      transition: all 0.2s;
+    }
+    .option-btn:hover {
+      border-color: #fdba74;
+      background: #fffaf5;
+    }
+    .option-btn.selected {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      font-weight: 700;
+    }
+    .opt-letter {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: #f1f5f9;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .option-btn.selected .opt-letter {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Navigator Grid */
+    .grid-nav {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 6px;
+      margin-bottom: 20px;
+      padding: 12px;
+      background: #f8fafc;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+    }
+    @media (max-width: 600px) {
+      .grid-nav {
+        grid-template-columns: repeat(5, 1fr);
+      }
+    }
+    .nav-cell {
+      padding: 8px 0;
+      font-size: 12px;
+      font-weight: bold;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      background: white;
+      color: #475569;
+      cursor: pointer;
+      position: relative;
+    }
+    .nav-cell.current {
+      outline: 2px solid var(--primary);
+      outline-offset: 1px;
+    }
+    .nav-cell.answered {
+      background: var(--success-light);
+      color: #065f46;
+      border-color: #6ee7b7;
+    }
+    .nav-cell.flagged::after {
+      content: "";
+      position: absolute;
+      top: 3px;
+      right: 3px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--warning);
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(2px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 100;
+    }
+    .modal-content {
+      background: white;
+      border-radius: 20px;
+      padding: 28px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+
+    /* Results */
+    .score-hero {
+      text-align: center;
+      padding: 20px 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .score-number {
+      font-size: 52px;
+      font-weight: 900;
+      color: var(--primary);
+      line-height: 1;
+      margin: 12px 0 6px;
+    }
+    .score-percentage {
+      font-size: 20px;
+      font-weight: 700;
+      color: #334155;
+    }
+    .grade-badge {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 6px 16px;
+      border-radius: 99px;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 20px 0;
+    }
+    .stat-box {
+      padding: 14px;
+      border-radius: 12px;
+      text-align: center;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+    }
+    .stat-val {
+      font-size: 22px;
+      font-weight: 800;
+      margin-top: 4px;
+    }
+
+    /* Review list */
+    .review-filters {
+      display: flex;
+      gap: 8px;
+      margin: 20px 0 16px;
+    }
+    .filter-btn {
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid transparent;
+    }
+    .filter-btn.active {
+      background: white;
+      border-color: #cbd5e1;
+      color: #0f172a;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .review-item {
+      padding: 18px;
+      border-radius: 14px;
+      margin-bottom: 14px;
+      border: 1px solid #e2e8f0;
+    }
+    .review-item.is-correct {
+      background: rgba(16, 185, 129, 0.05);
+      border-color: #a7f3d0;
+    }
+    .review-item.is-wrong {
+      background: rgba(239, 68, 68, 0.05);
+      border-color: #fecaca;
+    }
+    .solution-box {
+      margin-top: 12px;
+      padding: 10px 14px;
+      background: white;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      font-size: 13px;
+      color: #475569;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 32px;
+      font-size: 13px;
+      color: #64748b;
+    }
+
+    @media print {
+      body { background: white; padding: 0; }
+      .btn-sound, .btn-primary, .btn-secondary, .review-filters, footer { display: none !important; }
+      .card { box-shadow: none; border: none; padding: 0; }
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div id="namePage">
-      <h1>Welcome to Yeriel Bracha Math Quiz!</h1>
-      <p>Please enter your full name to begin:</p>
-      <input type="text" id="studentName" placeholder="Enter your name" />
-      <div class="controls">
-        <button class="primary" id="proceedBtn">Proceed</button>
+
+  <div class="container">
+    <div class="card">
+      <!-- Header -->
+      <div class="header-bar">
+        <div class="brand">
+          <div class="brand-icon">💻</div>
+          <div class="brand-text">
+            <h1>Yeriel Bracha Computing Club</h1>
+            <p>Computer Hardware & Storage Quiz</p>
+          </div>
+        </div>
+        <button id="soundToggle" class="btn-sound" title="Toggle Sound">🔊</button>
       </div>
-      <p id="lockMessage" style="text-align:center; color:red; font-weight:bold;"></p>
-    </div>
 
-    <div id="welcomePage" class="hidden">
-      <h1>Welcome Quizzilla!</h1>
-      <p>This quiz will test your understanding of <strong>Compound Probability</strong>.</p>
-      <p><marquee>Think carefully before selecting your answers!</marquee></p>
-      <p>You will have <strong>15 minutes</strong> to answer <strong>10 questions</strong>.</p>
-      <div class="controls">
-        <button class="primary" id="startBtn">Start Quiz</button>
+      <!-- PAGE 1: NAME ENTRY -->
+      <div id="namePage">
+        <h2 style="font-size: 22px; font-weight: 800; text-align: center; margin-bottom: 8px;">
+          Welcome Quizzilla!
+        </h2>
+        <p style="text-align: center; color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">
+          Please enter your full name to begin the computing assessment:
+        </p>
+        <div style="max-width: 420px; margin: 0 auto;">
+          <input type="text" id="studentNameInput" placeholder="Enter full name (e.g. Ama Mensah)" autofocus />
+          <div id="lockMessage" class="hidden" style="margin-top: 14px; padding: 12px; background: var(--danger-light); color: var(--danger); border-radius: 10px; font-size: 13px; font-weight: 600;"></div>
+          <div style="margin-top: 20px;">
+            <button id="proceedBtn" class="btn-primary" style="width: 100%;">
+              Proceed to Instructions ➜
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <div id="countdownScreen" class="hidden"></div>
+      <!-- PAGE 2: WELCOME & RULES -->
+      <div id="welcomePage" class="hidden">
+        <h2 id="welcomeGreeting" style="font-size: 22px; font-weight: 800; text-align: center; margin-bottom: 8px;"></h2>
+        <p style="text-align: center; color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">
+          This test examines <strong>Computer Hardware, Peripherals, Motherboard & Storage Devices</strong>.
+        </p>
 
-    <div id="quizArea" class="hidden">
-      <div id="timer"></div>
-      <div id="question"></div>
-      <div id="options"></div>
-      <input type="text" id="shortAnswer" class="hidden" placeholder="Type your answer here" />
-      <div class="controls">
-        <button type="button" id="prevBtn" class="primary">Previous</button>
-        <button type="button" id="nextBtn" class="primary">Next</button>
-        <button type="button" id="submitBtn" class="primary hidden">Submit Quiz</button>
+        <div style="background: var(--primary-light); padding: 18px; border-radius: 12px; border: 1px solid var(--border); font-size: 14px; line-height: 1.6; margin-bottom: 24px;">
+          <ul style="padding-left: 20px;">
+            <li><strong>Total Questions:</strong> 20 multiple-choice questions</li>
+            <li><strong>Time Allowed:</strong> 20 minutes (1 minute per question)</li>
+            <li><strong>Navigation:</strong> You can skip and return to questions at any time.</li>
+            <li><strong>Flag Feature:</strong> Mark questions you want to double-check before submission.</li>
+          </ul>
+        </div>
+
+        <div style="display: flex; gap: 12px; justify-content: center;">
+          <button id="backToNameBtn" class="btn-secondary">Change Name</button>
+          <button id="startBtn" class="btn-primary">Start Assessment Now ➜</button>
+        </div>
       </div>
-    </div>
 
-    <div id="results" class="results hidden"></div>
+      <!-- PAGE 3: COUNTDOWN -->
+      <div id="countdownScreen" class="hidden">
+        <div class="countdown-circle" id="countdownCircle">3</div>
+        <p style="font-size: 16px; font-weight: 700; color: #475569;">Get ready to begin...</p>
+      </div>
+
+      <!-- PAGE 4: QUIZ AREA -->
+      <div id="quizArea" class="hidden">
+        <div class="quiz-stats">
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <span class="badge badge-orange" id="qNumberBadge">Q 1 of 20</span>
+            <button id="toggleGridBtn" class="btn-secondary" style="padding: 6px 12px; font-size: 12px;">Navigator</button>
+          </div>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <button id="flagBtn" class="btn-secondary" style="padding: 6px 12px; font-size: 12px;">🚩 Flag</button>
+            <div id="timerDisplay" class="badge timer">20:00</div>
+          </div>
+        </div>
+
+        <!-- Question Navigation Grid (Expandable) -->
+        <div id="navGrid" class="grid-nav hidden"></div>
+
+        <div class="progress-bar-wrap">
+          <div id="progressFill" class="progress-fill" style="width: 5%;"></div>
+        </div>
+
+        <h3 id="questionText" class="question-title"></h3>
+
+        <div id="optionsContainer" class="options-list"></div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 28px; padding-top: 18px; border-top: 1px solid #f1f5f9;">
+          <button id="prevBtn" class="btn-secondary">⬅ Previous</button>
+          <div style="display: flex; gap: 10px;">
+            <button id="nextBtn" class="btn-primary">Next ➜</button>
+            <button id="submitTriggerBtn" class="btn-success">Submit Quiz ✓</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAGE 5: RESULTS -->
+      <div id="resultsPage" class="hidden">
+        <div class="score-hero">
+          <h2 style="font-size: 24px; font-weight: 800; color: #0f172a;">Quiz Completed!</h2>
+          <p id="resultStudentName" style="color: #64748b; font-size: 15px; margin-top: 4px;"></p>
+          <div class="score-number" id="scoreDisplay">0 / 20</div>
+          <div class="score-percentage" id="percentageDisplay">0%</div>
+          <div id="gradeBadge" class="grade-badge"></div>
+        </div>
+
+        <div class="summary-grid">
+          <div class="stat-box">
+            <div style="font-size: 12px; font-weight: bold; color: var(--success);">CORRECT</div>
+            <div class="stat-val" id="correctCount" style="color: var(--success);">0</div>
+          </div>
+          <div class="stat-box">
+            <div style="font-size: 12px; font-weight: bold; color: var(--danger);">INCORRECT</div>
+            <div class="stat-val" id="wrongCount" style="color: var(--danger);">0</div>
+          </div>
+          <div class="stat-box">
+            <div style="font-size: 12px; font-weight: bold; color: #3b82f6;">TIME TAKEN</div>
+            <div class="stat-val" id="timeTakenDisplay" style="color: #1e40af; font-size: 18px; margin-top: 6px;">0:00</div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; justify-content: center; margin: 16px 0;">
+          <button onclick="window.print()" class="btn-secondary">🖨 Print Results</button>
+          <button id="retakeBtn" class="btn-primary">Switch Student / New Attempt</button>
+        </div>
+
+        <!-- Filter tabs for review -->
+        <div class="review-filters">
+          <button class="filter-btn active" data-filter="all">All (20)</button>
+          <button class="filter-btn" data-filter="correct">Correct</button>
+          <button class="filter-btn" data-filter="wrong">Incorrect</button>
+        </div>
+
+        <div id="reviewContainer"></div>
+      </div>
+
+    </div>
 
     <footer>
-      <p>Yeriel Bracha Computing & Math Club<br>©2025</p>
+      <p>Yeriel Bracha Computing & Math Club • Hardware & Storage Devices Assessment © 2025</p>
     </footer>
   </div>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-  import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+  <!-- CONFIRM SUBMIT MODAL -->
+  <div id="submitModal" class="modal-backdrop hidden">
+    <div class="modal-content">
+      <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 8px;">Submit your quiz?</h3>
+      <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 16px;">
+        Make sure you have answered all questions.
+      </p>
+      <div style="background: #f8fafc; padding: 14px; border-radius: 12px; font-size: 14px; text-align: left; margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+          <span>Answered:</span> <strong id="modalAnswered" style="color: var(--success);">0 / 20</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+          <span>Unanswered:</span> <strong id="modalUnanswered" style="color: var(--danger);">20</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span>Flagged for review:</span> <strong id="modalFlagged" style="color: var(--warning);">0</strong>
+        </div>
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <button id="modalCancelBtn" class="btn-secondary" style="flex: 1;">Keep Reviewing</button>
+        <button id="modalConfirmBtn" class="btn-success" style="flex: 1;">Yes, Submit</button>
+      </div>
+    </div>
+  </div>
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyCY9oturc9bql33PSUkfNUptcHXla2RWN4",
-    authDomain: "tracha-xx.firebaseapp.com",
-    databaseURL: "https://tracha-xx-default-rtdb.firebaseio.com",
-    projectId: "tracha-xx",
-    storageBucket: "tracha-xx.appspot.com",
-    messagingSenderId: "914440906583",
-    appId: "1:914440906583:web:123abc456xyz"
-  };
+  <script>
+    /* ========================================================
+       🔹 QUIZ DATA (20 Computing Questions)
+       ======================================================== */
+    const quizData = [
+      {
+        question: "During a practical lesson, Ama presses keys on a computer to type her name into a document. Which category does the device she is using belong to?",
+        options: ["Output device", "Input device", "Storage device", "Processing device"],
+        answer: 1,
+        solution: "Ama is using a keyboard, which is an input device used to enter text, numbers, and commands into the computer."
+      },
+      {
+        question: "Kojo is asked to identify a computer component that he can see and touch. He points to the motherboard. Why is his choice correct?",
+        options: ["The motherboard is software", "The motherboard is liveware", "The motherboard is a physical part of the computer", "The motherboard is an instruction"],
+        answer: 2,
+        solution: "Computer hardware consists of tangible physical components that can be seen and touched. The motherboard is physical hardware."
+      },
+      {
+        question: "A school secretary wants to produce a printed copy of a student's report. Which device should she use?",
+        options: ["Scanner", "Keyboard", "Printer", "Mouse"],
+        answer: 2,
+        solution: "A printer is an output device designed to produce physical hardcopy documents on paper."
+      },
+      {
+        question: "During a computer lesson, Kofi uses a mouse to select an icon, drag it across the desktop, and scroll through a page. Which type of input device is the mouse?",
+        options: ["Data entry device", "Pointing device", "Storage device", "Communication device"],
+        answer: 1,
+        solution: "A mouse controls the on-screen pointer/cursor to click, select, drag, and point to items on the desktop."
+      },
+      {
+        question: "A supermarket wants to read the coded information printed on products before customers pay. Which device from the lesson would be most appropriate?",
+        options: ["Barcode scanner", "Projector", "Speaker", "Plotter"],
+        answer: 0,
+        solution: "A barcode scanner is an optical input device specifically built to read printed barcode lines and numbers on retail products."
+      },
+      {
+        question: "A teacher wants to display a computer presentation on a large screen so that the whole class can see it. Which device should the teacher use?",
+        options: ["Projector", "Keyboard", "Scanner", "Microphone"],
+        answer: 0,
+        solution: "A projector is an optical output device that projects computer screen displays onto large screens or flat walls."
+      },
+      {
+        question: "Yaw saves his school documents on a USB flash drive so that he can use them again later. Which category does the USB flash drive belong to?",
+        options: ["Output device", "Storage device", "Processing device", "Pointing device"],
+        answer: 1,
+        solution: "A USB flash drive stores digital files in non-volatile flash memory, classifying it as a storage device."
+      },
+      {
+        question: "A student removes a USB flash drive from a computer and carries it home to access his files on another computer. What type of storage is the USB flash drive?",
+        options: ["Internal storage", "External storage", "Primary storage", "Processing storage"],
+        answer: 1,
+        solution: "Because it connects externally via a USB port and is portable between computers, it is external storage."
+      },
+      {
+        question: "During a practical lesson, a teacher explains that one storage device is installed inside the system unit while another can be connected from outside. Which classification is being explained?",
+        options: ["Input and output storage", "Primary and secondary storage", "Internal and external storage", "Hardcopy and softcopy storage"],
+        answer: 2,
+        solution: "Internal storage is installed inside the system chassis, whereas external storage connects from the outside."
+      },
+      {
+        question: "Adwoa is working on a document but suddenly the electricity goes off before she saves it. When the computer is turned on again, the information that was being held in RAM is no longer available. What property of RAM explains this?",
+        options: ["RAM is external", "RAM is volatile", "RAM is optical", "RAM is hardcopy"],
+        answer: 1,
+        solution: "RAM is volatile memory; it requires electrical power to keep its contents. When power cuts off, unsaved data is lost."
+      },
+      {
+        question: "A school wants a device that can retain students' files for a long period even when the computer is switched off. Which type of storage should the school mainly consider?",
+        options: ["Secondary storage", "RAM", "Cache", "Primary storage only"],
+        answer: 0,
+        solution: "Secondary storage (HDDs, SSDs, flash drives) is non-volatile and retains files permanently without needing continuous power."
+      },
+      {
+        question: "A computer technician explains that the CPU, RAM, hard disk drive and cooling fans communicate through one main circuit board. Which component is the technician describing?",
+        options: ["Keyboard", "Motherboard", "Monitor", "Printer"],
+        answer: 1,
+        solution: "The motherboard is the primary printed circuit board that interconnects all major computer components."
+      },
+      {
+        question: "During a computer repair, a technician needs to place the CPU onto the motherboard. Which part of the motherboard is specifically designed for this purpose?",
+        options: ["CPU socket", "Memory card", "Power adaptor", "Cooling fan"],
+        answer: 0,
+        solution: "The CPU socket is the dedicated electrical connector on the motherboard engineered to mount the processor."
+      },
+      {
+        question: "A school buys a projector, printer, scanner and speakers to connect to its computers for different tasks. How can these devices be generally described?",
+        options: ["Peripheral devices", "Software", "Liveware", "CPU components"],
+        answer: 0,
+        solution: "Auxiliary devices connected externally to a computer to expand its capabilities are termed peripheral devices."
+      },
+      {
+        question: "During a lesson, a teacher asks learners to classify a monitor, projector and headphones. Which category should they place these devices under?",
+        options: ["Input devices", "Output devices", "Storage devices", "Processing devices"],
+        answer: 1,
+        solution: "Monitors, projectors, and headphones all deliver processed computer information to the human senses (output devices)."
+      },
+      {
+        question: "A student needs to produce a physical copy of a large poster for a school programme. Which output device from the notes would be suitable?",
+        options: ["Plotter", "Mouse", "Scanner", "Keyboard"],
+        answer: 0,
+        solution: "A plotter is an output printing device that renders high-precision line drawings, blueprints, and large-format posters."
+      },
+      {
+        question: "During a class presentation, students watch images and information displayed on a screen without receiving a physical printed copy. What type of output is being produced?",
+        options: ["Hardcopy output", "Softcopy output", "Primary storage", "Data entry"],
+        answer: 1,
+        solution: "Softcopy output refers to intangible electronic visual or audio output shown on a screen rather than printed on paper."
+      },
+      {
+        question: "A company needs to send and receive digital data between computers over a network. Which category of device would help perform this function?",
+        options: ["Communication device", "Pointing device", "Hardcopy device", "Data entry device"],
+        answer: 0,
+        solution: "Communication devices (modems, network interface cards, routers) transmit and receive data across networks."
+      },
+      {
+        question: "A student is asked to enter printed information directly into a computer. The teacher gives the student a scanner. Which category of input device does the scanner belong to?",
+        options: ["Pointing device", "Data entry device", "Output device", "Processing device"],
+        answer: 1,
+        solution: "A scanner captures hardcopy paper documents and converts them directly into digital computer data (data entry input)."
+      },
+      {
+        question: "During a computer lesson, a teacher shows learners a hard disk and a compact disc. She explains that one uses magnetic media while the other uses optical or light media. Which statement correctly matches them?",
+        options: [
+          "Hard disk uses optical media; CD uses magnetic media",
+          "Hard disk uses magnetic media; CD uses optical media",
+          "Both use magnetic media",
+          "Both use optical media"
+        ],
+        answer: 1,
+        solution: "A hard disk drive uses magnetic platters to record data, whereas a CD uses optical laser beams to read and write data pits."
+      }
+    ];
 
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
+    /* ========================================================
+       🔹 SOUND SYNTHESIZER (Web Audio API)
+       ======================================================== */
+    let audioEnabled = true;
+    let audioCtx = null;
 
-  /* ===========================
-     🔹 COMPOUND PROBABILITY QUIZ DATA
-  ============================ */
-  const quizData = [
-    {
-      q: "1. A coin is tossed and a die is rolled. What is the probability of getting a tail and an odd number?",
-      options: ["1/6", "1/3", "1/2", "1/12"],
-      answer: "1/6",
-      solution: "P(tail) = 1/2, P(odd) = 3/6 = 1/2. Multiply → 1/2 × 1/2 = 1/4."
-    },
-    {
-      q: "2. A coin is tossed and a die is rolled. What is the probability of getting a head and a number greater than 4?",
-      options: ["1/3", "1/4", "1/6", "1/8"],
-      answer: "1/6",
-      solution: "Numbers greater than 4 are 5,6 (2 out of 6 → 1/3). P(H) × P(>4) = 1/2 × 1/3 = 1/6."
-    },
-    {
-      q: "3. A bag contains 4 red and 3 blue balls. Two balls are drawn one after another without replacement. Find the probability of drawing two blue balls.",
-      options: ["3/7", "1/7", "1/7 × 1/6", "1/7 × 2/7"],
-      answer: "1/7",
-      solution: "P(blue first) = 3/7; after removing 1 blue, P(blue again) = 2/6 = 1/3 → 3/7 × 1/3 = 3/21 = 1/7."
-    },
-    {
-      q: "4. A bag contains 4 red and 3 blue balls. One red and one blue ball are drawn without replacement. Find the probability.",
-      options: ["4/7 × 3/6", "3/7 × 4/6", "7/42", "Both (a) and (b)"],
-      answer: "Both (a) and (b)",
-      solution: "Either red first then blue, or blue first then red — both give 12/42 = 2/7."
-    },
-    {
-      q: "5. If two dice are rolled, what is the probability that the sum is 7?",
-      options: ["1/12", "1/8", "1/6", "1/36"],
-      answer: "1/6",
-      solution: "There are 6 outcomes for sum = 7 (1,6)(2,5)(3,4)(4,3)(5,2)(6,1). 6/36 = 1/6."
-    },
-    {
-      q: "6. A deck of 52 cards is used. Find the probability of drawing a Queen or a Diamond.",
-      options: ["1/4", "4/13", "1/13", "17/52"],
-      answer: "17/52",
-      solution: "P(Queen) = 4/52, P(Diamond) = 13/52, overlap (Queen of Diamonds) = 1/52. So total = 4+13−1 = 16/52 = 17/52."
-    },
-    {
-      q: "7. The probability of event A is 0.4 and event B is 0.5. If they are independent, find P(A and B).",
-      options: ["0.9", "0.2", "0.25", "0.45"],
-      answer: "0.2",
-      solution: "For independent events: P(A and B) = P(A) × P(B) = 0.4 × 0.5 = 0.2."
-    },
-    {
-      q: "8. A spinner has 8 equal sections numbered 1 to 8. What is the probability of spinning an even number and then an odd number (with replacement)?",
-      options: ["1/4", "1/2", "1/8", "3/8"],
-      answer: "1/4",
-      solution: "P(even) = 4/8 = 1/2, P(odd) = 4/8 = 1/2. Multiply → 1/2 × 1/2 = 1/4."
-    },
-    {
-      q: "9. A coin is tossed three times. Find the probability of getting exactly two heads.",
-      options: ["3/8", "1/4", "1/2", "5/8"],
-      answer: "3/8",
-      solution: "Total outcomes = 8, favorable = HHT, HTH, THH (3). So P = 3/8."
-    },
-    {
-      q: "10. A bag contains 6 green, 3 red, and 1 yellow marble. What is the probability that a marble drawn is not green?",
-      options: ["2/5", "3/10", "4/10", "1/10"],
-      answer: "2/5",
-      solution: "Total = 10, not green = 4 (3 red + 1 yellow). So 4/10 = 2/5."
+    function playTone(freq, type = 'sine', duration = 0.1) {
+      if (!audioEnabled) return;
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
     }
-  ];
 
-  /* ===========================
-     🔹 Main Quiz Logic (Unchanged)
-  ============================ */
-  let studentName = "";
-  let currentQuestion = 0;
-  let answers = [];
-  let timer;
-  let timeLeft = 15 * 60;
-  const lockDuration = 12 * 60 * 60 * 1000;
+    const soundToggle = document.getElementById("soundToggle");
+    soundToggle.addEventListener("click", () => {
+      audioEnabled = !audioEnabled;
+      soundToggle.textContent = audioEnabled ? "🔊" : "🔇";
+    });
 
-  const namePage = document.getElementById("namePage");
-  const welcomePage = document.getElementById("welcomePage");
-  const countdownScreen = document.getElementById("countdownScreen");
-  const quizArea = document.getElementById("quizArea");
-  const resultsDiv = document.getElementById("results");
-  const questionDiv = document.getElementById("question");
-  const optionsDiv = document.getElementById("options");
-  const prevBtn = document.getElementById("prevBtn");
-  const nextBtn = document.getElementById("nextBtn");
-  const submitBtn = document.getElementById("submitBtn");
-  const timerDiv = document.getElementById("timer");
-  const lockMsg = document.getElementById("lockMessage");
+    /* ========================================================
+       🔹 STATE & CONTROLS
+       ======================================================== */
+    let studentName = "";
+    let currentIndex = 0;
+    let userAnswers = new Array(quizData.length).fill(null);
+    let flagged = new Array(quizData.length).fill(false);
+    let timeLeft = 20 * 60; // 20 minutes
+    let timerInterval = null;
+    let startTime = 0;
+    let timeTaken = 0;
+    const lockDuration = 12 * 60 * 60 * 1000;
 
-  document.getElementById("proceedBtn").addEventListener("click", async () => {
-    const nameInput = document.getElementById("studentName").value.trim();
-    if (nameInput === "") { alert("Please enter your name!"); return; }
-    studentName = nameInput;
+    // Elements
+    const namePage = document.getElementById("namePage");
+    const welcomePage = document.getElementById("welcomePage");
+    const countdownScreen = document.getElementById("countdownScreen");
+    const quizArea = document.getElementById("quizArea");
+    const resultsPage = document.getElementById("resultsPage");
 
-    const userRef = ref(db, "quizResults/" + studentName);
-    const snapshot = await get(userRef);
-    if (snapshot.exists()) {
-      const data = snapshot.val();
-      if (data.lockedUntil && Date.now() < data.lockedUntil) {
-        const unlockTime = new Date(data.lockedUntil).toLocaleString();
-        lockMsg.textContent = `You already completed this quiz. You can retry after ${unlockTime}`;
+    const studentNameInput = document.getElementById("studentNameInput");
+    const proceedBtn = document.getElementById("proceedBtn");
+    const lockMessage = document.getElementById("lockMessage");
+
+    const welcomeGreeting = document.getElementById("welcomeGreeting");
+    const startBtn = document.getElementById("startBtn");
+    const backToNameBtn = document.getElementById("backToNameBtn");
+
+    const qNumberBadge = document.getElementById("qNumberBadge");
+    const timerDisplay = document.getElementById("timerDisplay");
+    const progressFill = document.getElementById("progressFill");
+    const questionText = document.getElementById("questionText");
+    const optionsContainer = document.getElementById("optionsContainer");
+    const navGrid = document.getElementById("navGrid");
+    const toggleGridBtn = document.getElementById("toggleGridBtn");
+    const flagBtn = document.getElementById("flagBtn");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const submitTriggerBtn = document.getElementById("submitTriggerBtn");
+
+    // Modal elements
+    const submitModal = document.getElementById("submitModal");
+    const modalAnswered = document.getElementById("modalAnswered");
+    const modalUnanswered = document.getElementById("modalUnanswered");
+    const modalFlagged = document.getElementById("modalFlagged");
+    const modalCancelBtn = document.getElementById("modalCancelBtn");
+    const modalConfirmBtn = document.getElementById("modalConfirmBtn");
+
+    /* ========================================================
+       🔹 STEP 1: NAME & LOCK CHECK
+       ======================================================== */
+    proceedBtn.addEventListener("click", () => {
+      const name = studentNameInput.value.trim();
+      if (!name) {
+        studentNameInput.focus();
         return;
       }
+      studentName = name;
+
+      // Check lock in localStorage
+      const savedData = localStorage.getItem("yeriel_quiz_" + name.toLowerCase());
+      if (savedData) {
+        try {
+          const parsed = JSON.parse(savedData);
+          if (parsed.lockedUntil && Date.now() < parsed.lockedUntil) {
+            const timeStr = new Date(parsed.lockedUntil).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short' });
+            lockMessage.textContent = `You have already taken this assessment. Next allowed attempt is after ${timeStr}.`;
+            lockMessage.classList.remove("hidden");
+            return;
+          }
+        } catch(e) {}
+      }
+
+      lockMessage.classList.add("hidden");
+      namePage.classList.add("hidden");
+      welcomeGreeting.textContent = `Welcome, ${studentName}!`;
+      welcomePage.classList.remove("hidden");
+      playTone(550, 'sine', 0.1);
+    });
+
+    studentNameInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") proceedBtn.click();
+    });
+
+    backToNameBtn.addEventListener("click", () => {
+      welcomePage.classList.add("hidden");
+      namePage.classList.remove("hidden");
+    });
+
+    /* ========================================================
+       🔹 STEP 2: COUNTDOWN
+       ======================================================== */
+    startBtn.addEventListener("click", () => {
+      welcomePage.classList.add("hidden");
+      countdownScreen.classList.remove("hidden");
+      let count = 3;
+      const countEl = document.getElementById("countdownCircle");
+      countEl.textContent = count;
+      playTone(440, 'sine', 0.1);
+
+      const cd = setInterval(() => {
+        count--;
+        if (count > 0) {
+          countEl.textContent = count;
+          playTone(440, 'sine', 0.1);
+        } else {
+          clearInterval(cd);
+          countEl.textContent = "Go!";
+          playTone(880, 'triangle', 0.3);
+          setTimeout(() => {
+            countdownScreen.classList.add("hidden");
+            startQuiz();
+          }, 600);
+        }
+      }, 1000);
+    });
+
+    /* ========================================================
+       🔹 STEP 3: QUIZ LOGIC
+       ======================================================== */
+    function startQuiz() {
+      quizArea.classList.remove("hidden");
+      currentIndex = 0;
+      timeLeft = 20 * 60;
+      startTime = Date.now();
+      buildNavGrid();
+      renderQuestion();
+      startTimer();
     }
 
-    namePage.classList.add("hidden");
-    welcomePage.classList.remove("hidden");
-  });
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        const mins = Math.floor(timeLeft / 60);
+        const secs = timeLeft % 60;
+        timerDisplay.textContent = `${mins}:${secs.toString().padStart(2, "0")}`;
 
-  document.getElementById("startBtn").addEventListener("click", () => {
-    welcomePage.classList.add("hidden");
-    startCountdown();
-  });
+        if (timeLeft <= 120) {
+          timerDisplay.classList.add("warning");
+        }
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          finishQuiz();
+        }
+      }, 1000);
+    }
 
-  function startCountdown() {
-    countdownScreen.classList.remove("hidden");
-    let counter = 3;
-    countdownScreen.textContent = "Get ready... " + counter;
+    function renderQuestion() {
+      const q = quizData[currentIndex];
+      qNumberBadge.textContent = `Q ${currentIndex + 1} of ${quizData.length}`;
+      questionText.textContent = q.question;
 
-    const countdown = setInterval(() => {
-      counter--;
-      if (counter > 0) {
-        countdownScreen.textContent = counter + "...";
+      // Update progress bar
+      const pct = ((currentIndex + 1) / quizData.length) * 100;
+      progressFill.style.width = pct + "%";
+
+      // Flag button style
+      if (flagged[currentIndex]) {
+        flagBtn.style.background = "var(--warning-light)";
+        flagBtn.style.borderColor = "var(--warning)";
+        flagBtn.textContent = "🚩 Flagged";
       } else {
-        clearInterval(countdown);
-        countdownScreen.textContent = "Begin!";
-        setTimeout(() => {
-          countdownScreen.classList.add("hidden");
-          startQuiz();
-        }, 800);
+        flagBtn.style.background = "#f1f5f9";
+        flagBtn.style.borderColor = "#cbd5e1";
+        flagBtn.textContent = "🚩 Flag";
       }
-    }, 1000);
-  }
 
-  function startQuiz() {
-    quizArea.classList.remove("hidden");
-    loadQuestion();
-    startTimer();
-  }
+      // Render options
+      optionsContainer.innerHTML = "";
+      const letters = ["A", "B", "C", "D"];
+      q.options.forEach((optText, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "option-btn" + (userAnswers[currentIndex] === idx ? " selected" : "");
+        btn.innerHTML = `<span class="opt-letter">${letters[idx]}</span><span>${optText}</span>`;
+        btn.onclick = () => {
+          userAnswers[currentIndex] = idx;
+          playTone(600, 'sine', 0.05);
+          renderQuestion();
+          updateNavGrid();
+        };
+        optionsContainer.appendChild(btn);
+      });
 
-  function loadQuestion() {
-    const q = quizData[currentQuestion];
-    questionDiv.innerHTML = `<h2>${q.q}</h2>`;
-    optionsDiv.innerHTML = "";
-
-    q.options.forEach(opt => {
-      const btn = document.createElement("button");
-      btn.textContent = opt;
-      btn.className = "secondary";
-      btn.onclick = () => saveAnswer(opt);
-      if (answers[currentQuestion] === opt) {
-        btn.style.background = "#4CAF50";
-        btn.style.color = "white";
+      // Nav controls
+      prevBtn.disabled = currentIndex === 0;
+      if (currentIndex === quizData.length - 1) {
+        nextBtn.classList.add("hidden");
+      } else {
+        nextBtn.classList.remove("hidden");
       }
-      optionsDiv.appendChild(btn);
-    });
-
-    prevBtn.disabled = currentQuestion === 0;
-    nextBtn.classList.toggle("hidden", currentQuestion === quizData.length - 1);
-    submitBtn.classList.toggle("hidden", currentQuestion !== quizData.length - 1);
-  }
-
-  function saveAnswer(ans) {
-    answers[currentQuestion] = ans;
-    loadQuestion();
-  }
-
-  nextBtn.onclick = () => {
-    if (currentQuestion < quizData.length - 1) {
-      currentQuestion++;
-      loadQuestion();
+      updateNavGrid();
     }
-  };
 
-  prevBtn.onclick = () => {
-    if (currentQuestion > 0) {
-      currentQuestion--;
-      loadQuestion();
-    }
-  };
-
-  submitBtn.onclick = finishQuiz;
-
-  function startTimer() {
-    timer = setInterval(() => {
-      timeLeft--;
-      let mins = Math.floor(timeLeft / 60);
-      let secs = timeLeft % 60;
-      timerDiv.textContent = `Time Left: ${mins}:${secs.toString().padStart(2, "0")}`;
-      if (timeLeft <= 0) {
-        clearInterval(timer);
-        finishQuiz();
+    prevBtn.addEventListener("click", () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        playTone(480, 'sine', 0.04);
+        renderQuestion();
       }
-    }, 1000);
-  }
-
-  function finishQuiz() {
-    clearInterval(timer);
-    quizArea.classList.add("hidden");
-    resultsDiv.classList.remove("hidden");
-
-    let score = 0;
-    let summaryHTML = "<div class='summary'><h3>Solutions & Feedback</h3>";
-
-    quizData.forEach((q, i) => {
-      const userAns = answers[i] || "(no answer)";
-      const correct = userAns === q.answer;
-      if (correct) score++;
-      summaryHTML += `<p><strong>Q${i + 1}:</strong> ${q.q}<br>
-      Your answer: <span class="${correct ? 'correct' : 'wrong'}">${userAns}</span><br>
-      Correct answer: <span class="correct">${q.answer}</span><br>
-      <em>Solution:</em> ${q.solution}</p>`;
     });
 
-    const percentage = ((score / quizData.length) * 100).toFixed(2);
-    summaryHTML += "</div>";
-
-    resultsDiv.innerHTML = `
-      <h2>Quiz Completed!</h2>
-      <p><strong>Name:</strong> ${studentName}</p>
-      <p>Your Score: <strong>${score} / ${quizData.length}</strong> (${percentage}%)</p>
-      ${summaryHTML}
-    `;
-
-    const lockedUntil = Date.now() + lockDuration;
-    const quizRef = ref(db, "quizResults/" + studentName);
-    set(quizRef, {
-      name: studentName,
-      score: score,
-      percentage: percentage,
-      totalQuestions: quizData.length,
-      timestamp: new Date().toISOString(),
-      lockedUntil: lockedUntil
+    nextBtn.addEventListener("click", () => {
+      if (currentIndex < quizData.length - 1) {
+        currentIndex++;
+        playTone(520, 'sine', 0.04);
+        renderQuestion();
+      }
     });
-  }
-</script>
+
+    flagBtn.addEventListener("click", () => {
+      flagged[currentIndex] = !flagged[currentIndex];
+      renderQuestion();
+    });
+
+    function buildNavGrid() {
+      navGrid.innerHTML = "";
+      quizData.forEach((_, i) => {
+        const cell = document.createElement("button");
+        cell.className = "nav-cell";
+        cell.textContent = i + 1;
+        cell.onclick = () => {
+          currentIndex = i;
+          renderQuestion();
+        };
+        navGrid.appendChild(cell);
+      });
+      updateNavGrid();
+    }
+
+    function updateNavGrid() {
+      const cells = navGrid.children;
+      for (let i = 0; i < cells.length; i++) {
+        cells[i].className = "nav-cell";
+        if (i === currentIndex) cells[i].classList.add("current");
+        if (userAnswers[i] !== null) cells[i].classList.add("answered");
+        if (flagged[i]) cells[i].classList.add("flagged");
+      }
+    }
+
+    toggleGridBtn.addEventListener("click", () => {
+      navGrid.classList.toggle("hidden");
+      toggleGridBtn.textContent = navGrid.classList.contains("hidden") ? "Navigator" : "Hide Nav";
+    });
+
+    /* ========================================================
+       🔹 STEP 4: SUBMIT CONFIRMATION
+       ======================================================== */
+    submitTriggerBtn.addEventListener("click", () => {
+      const answered = userAnswers.filter(a => a !== null).length;
+      modalAnswered.textContent = `${answered} / ${quizData.length}`;
+      modalUnanswered.textContent = `${quizData.length - answered}`;
+      modalFlagged.textContent = `${flagged.filter(Boolean).length}`;
+      submitModal.classList.remove("hidden");
+    });
+
+    modalCancelBtn.addEventListener("click", () => {
+      submitModal.classList.add("hidden");
+    });
+
+    modalConfirmBtn.addEventListener("click", () => {
+      submitModal.classList.add("hidden");
+      finishQuiz();
+    });
+
+    /* ========================================================
+       🔹 STEP 5: RESULTS & REVIEW
+       ======================================================== */
+    function finishQuiz() {
+      if (timerInterval) clearInterval(timerInterval);
+      quizArea.classList.add("hidden");
+      resultsPage.classList.remove("hidden");
+
+      timeTaken = Math.max(1, Math.round((Date.now() - startTime) / 1000));
+      const m = Math.floor(timeTaken / 60);
+      const s = timeTaken % 60;
+      document.getElementById("timeTakenDisplay").textContent = `${m}m ${s}s`;
+
+      let score = 0;
+      quizData.forEach((q, idx) => {
+        if (userAnswers[idx] === q.answer) score++;
+      });
+
+      const pct = ((score / quizData.length) * 100).toFixed(1);
+
+      document.getElementById("resultStudentName").textContent = `Student: ${studentName}`;
+      document.getElementById("scoreDisplay").textContent = `${score} / ${quizData.length}`;
+      document.getElementById("percentageDisplay").textContent = `${pct}%`;
+      document.getElementById("correctCount").textContent = score;
+      document.getElementById("wrongCount").textContent = quizData.length - score;
+
+      // Grade badge
+      const gb = document.getElementById("gradeBadge");
+      if (pct >= 90) {
+        gb.textContent = "Distinction - Outstanding!";
+        gb.style.background = "var(--success-light)";
+        gb.style.color = "#065f46";
+      } else if (pct >= 75) {
+        gb.textContent = "Excellent Mastery";
+        gb.style.background = "#dbeafe";
+        gb.style.color = "#1e40af";
+      } else if (pct >= 60) {
+        gb.textContent = "Very Good";
+        gb.style.background = "var(--primary-light)";
+        gb.style.color = "var(--primary-dark)";
+      } else if (pct >= 50) {
+        gb.textContent = "Pass";
+        gb.style.background = "var(--warning-light)";
+        gb.style.color = "#92400e";
+      } else {
+        gb.textContent = "Needs Revision";
+        gb.style.background = "var(--danger-light)";
+        gb.style.color = "#991b1b";
+      }
+
+      // Save lock in localStorage
+      const record = {
+        name: studentName,
+        score,
+        percentage: pct,
+        timestamp: new Date().toISOString(),
+        lockedUntil: Date.now() + lockDuration
+      };
+      localStorage.setItem("yeriel_quiz_" + studentName.toLowerCase(), JSON.stringify(record));
+
+      // Play success chime
+      [523, 659, 783, 1046].forEach((f, i) => setTimeout(() => playTone(f, 'triangle', 0.2), i * 90));
+
+      renderReview('all');
+    }
+
+    function renderReview(filter) {
+      const container = document.getElementById("reviewContainer");
+      container.innerHTML = "";
+
+      quizData.forEach((q, idx) => {
+        const userA = userAnswers[idx];
+        const isCorrect = userA === q.answer;
+
+        if (filter === 'correct' && !isCorrect) return;
+        if (filter === 'wrong' && isCorrect) return;
+
+        const div = document.createElement("div");
+        div.className = "review-item " + (isCorrect ? "is-correct" : "is-wrong");
+
+        div.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <strong style="font-size:13px; color:#64748b;">QUESTION ${idx + 1}</strong>
+            <span style="font-size:12px; font-weight:bold; color:${isCorrect ? 'var(--success)' : 'var(--danger)'};">
+              ${isCorrect ? '✓ Correct' : (userA === null ? '⚠ Unanswered' : '✗ Incorrect')}
+            </span>
+          </div>
+          <p style="font-weight:700; font-size:15px; margin-bottom:12px; color:#0f172a;">${q.question}</p>
+          <div style="font-size:14px; margin-bottom:6px;">
+            Your Answer: <strong style="color:${isCorrect ? 'var(--success)' : 'var(--danger)'};">
+              ${userA !== null ? q.options[userA] : '(None)'}
+            </strong>
+          </div>
+          <div style="font-size:14px;">
+            Correct Answer: <strong style="color:var(--success);">${q.options[q.answer]}</strong>
+          </div>
+          ${q.solution ? `<div class="solution-box"><strong>Explanation:</strong> ${q.solution}</div>` : ''}
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    // Filter tabs click
+    document.querySelectorAll(".filter-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        renderReview(btn.getAttribute("data-filter"));
+      });
+    });
+
+    document.getElementById("retakeBtn").addEventListener("click", () => {
+      resultsPage.classList.add("hidden");
+      namePage.classList.remove("hidden");
+      studentNameInput.value = "";
+      userAnswers.fill(null);
+      flagged.fill(false);
+      currentIndex = 0;
+    });
+  </script>
 </body>
-  </html>
+</html>
